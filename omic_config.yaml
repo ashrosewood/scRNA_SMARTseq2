@@ -1,0 +1,59 @@
+##############################################################################
+# Genome and project-specific files that will change from project-to-project
+##############################################################################
+
+# GTF file for the genome build you would like to use
+gtf_file:
+  /home/groups/CEDAR/anno/gtf/hg19_ens87.chr.gtf
+# Bed file for rseqc function read_distribution
+bed_file:
+  /home/groups/CEDAR/anno/gtf/hg19_ens87.chr.bed
+# Pre-built hisat indexes for hg19
+hisat2_index:
+  /home/groups/CEDAR/anno/indices/hisat2/hg19/hg19index  
+filter_anno:
+  /home/groups/CEDAR/anno/biomaRt/hg19.Ens_87.biomaRt.geneAnno.Rdata
+barcode_file:
+  /home/groups/CEDAR/woodfin/projects/NMT-seq/Transcriptome/20190613_matched20190523NM/PE-pipeline/barcodes.tsv
+  
+####################################################################
+# Tool-specific files that will not change from project-to-project
+####################################################################
+
+# Fasta file including the illumina adapters to be trimmed out via Trimmomatic
+adapter:
+  /home/exacloud/lustre1/CEDAR/roskamsh/projects/Omics-QC-pipeline/data/TruSeq2-SE.fa
+# Pre-built genome indexes for various organisms which we will screen against to look for contamination
+conf:
+  /home/groups/CEDAR/tools/FastQ_Screen_Genomes/fastq_screen.conf    
+# Paths to various tools which are used in this pipeline
+hisat2_tool:
+  /home/groups/CEDAR/tools/hisat2-2.0.4/hisat2
+
+##########################################
+# Important project-specific paths/files
+##########################################
+
+# Metadata needed for differential expression analysis
+#omic_meta_data:
+#  /path/to/metadata.txt
+
+#############################################################################################
+# Project-specific specifications you will need to make prior to submission of the pipeline
+#############################################################################################
+
+# Biotypes you would like to include in your gene counts table
+# Example: protein_coding,lincRNA,sRNA,rRNA,snRNA,snoRNA
+biotypes:
+  protein_coding
+# Unique project identifier which will be concatenated onto your counts table file name.
+project_id:
+  HM_novagene_20190703
+# Genome assembly used for GO analysis, format must be as below, with the genome assembly first, and the version of ensembl second, separated by a period.
+assembly:
+  hg19
+# remove mito genes (1/0)
+mito:
+  1
+
+

@@ -1,0 +1,44 @@
+name: fastqscreen
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - bowtie=1.2.2
+  - bowtie2=2.3.4.3
+  - fastq-screen=0.13.0
+  - perl-gd=2.69
+  - perl-gdgraph=1.54
+  - perl-gdtextutil=0.86
+  - ca-certificates=2018.10.15
+  - certifi=2018.10.15
+  - expat=2.2.5
+  - fontconfig=2.13.1
+  - freetype=2.9.1
+  - giflib=5.1.4
+  - icu=58.2
+  - jpeg=9c
+  - libffi=3.2.1
+  - libgcc-ng=7.2.0
+  - libgd=2.2.5
+  - libiconv=1.15
+  - libpng=1.6.35
+  - libstdcxx-ng=7.2.0
+  - libtiff=4.0.9
+  - libuuid=2.32.1
+  - libwebp=1.0.1
+  - libxml2=2.9.8
+  - ncurses=6.1
+  - openssl=1.0.2p
+  - perl=5.26.2
+  - pip=18.1
+  - python=3.6.6
+  - readline=7.0
+  - setuptools=40.6.2
+  - sqlite=3.25.3
+  - tbb=2019.2
+  - tk=8.6.9
+  - wheel=0.32.3
+  - xz=5.2.4
+  - zlib=1.2.11
+
