@@ -1,8 +1,0 @@
-==> 2019-09-05 19:51:57 <==
-# cmd: /home/users/doe/miniconda3/bin/conda-env create --file /home/groups/CEDAR/doe/methylome-pipeline/scNMT_transcriptomeMapping/.snakemake/conda/cef407d5.yaml --prefix /home/groups/CEDAR/doe/methylome-pipeline/scNMT_transcriptomeMapping/.snakemake/conda/cef407d5
-# conda version: 4.7.11
-+bioconda::subread-1.6.4-h84994c4_1
-+defaults::_libgcc_mutex-0.1-main
-+defaults::libgcc-ng-9.1.0-hdf63c60_0
-+defaults::zlib-1.2.11-h7b6447c_3
-# update specs: ['libgcc-ng==9.1.0=hdf63c60_0', 'zlib==1.2.11=h7b6447c_3', 'subread==1.6.4=h84994c4_1']
