@@ -1,9 +1,9 @@
 {
     "__default__" :
     {
-        "t" : "4-00:00:00",
+        "t" : "35:00:00",
         "N" : 1,
-        "partition" : "long_jobs",
+        "partition" : "exacloud",
         "J" : "{rule}.{wildcards}",
         "o" : "logs/{rule}/{wildcards}_{rule}%j.out",
         "e" : "logs/{rule}/{wildcards}_{rule}%j.err",

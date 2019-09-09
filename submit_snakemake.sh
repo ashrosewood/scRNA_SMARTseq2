@@ -1,6 +1,6 @@
 #!/usr/bin/bash
-#SBATCH --time 4-00:00:00
-#SBATCH --partition long_jobs
+#SBATCH --time 35:00:00
+#SBATCH --partition exacloud
 #SBATCH --job-name workflow_submission
 #SBATCH --output=logs/workflow_submission_%j.log
 

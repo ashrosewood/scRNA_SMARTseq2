@@ -1,0 +1,216 @@
+{
+  "build": "h84994c4_1",
+  "build_number": 1,
+  "channel": "https://conda.anaconda.org/bioconda/linux-64",
+  "constrains": [],
+  "depends": [
+    "libgcc-ng >=7.3.0",
+    "zlib >=1.2.11,<1.3.0a0"
+  ],
+  "extracted_package_dir": "/home/users/doe/miniconda3/pkgs/subread-1.6.4-h84994c4_1",
+  "features": "",
+  "files": [
+    "annotation/hg19_RefSeq_exon.txt",
+    "annotation/hg38_RefSeq_exon.txt",
+    "annotation/mm10_RefSeq_exon.txt",
+    "annotation/mm9_RefSeq_exon.txt",
+    "bin/detectionCall",
+    "bin/exactSNP",
+    "bin/featureCounts",
+    "bin/flattenGTF",
+    "bin/genRandomReads",
+    "bin/propmapped",
+    "bin/qualityScores",
+    "bin/removeDup",
+    "bin/repair",
+    "bin/subindel",
+    "bin/subjunc",
+    "bin/sublong",
+    "bin/subread-align",
+    "bin/subread-buildindex",
+    "bin/subread-fullscan",
+    "bin/txUnique"
+  ],
+  "fn": "subread-1.6.4-h84994c4_1.tar.bz2",
+  "license": "GPLv3",
+  "link": {
+    "source": "/home/users/doe/miniconda3/pkgs/subread-1.6.4-h84994c4_1",
+    "type": 1
+  },
+  "md5": "c14ba4bd3f3afcb40b64db083cc5251a",
+  "name": "subread",
+  "package_tarball_full_path": "/home/users/doe/miniconda3/pkgs/subread-1.6.4-h84994c4_1.tar.bz2",
+  "paths_data": {
+    "paths": [
+      {
+        "_path": "annotation/hg19_RefSeq_exon.txt",
+        "path_type": "hardlink",
+        "sha256": "3e60486dd16a1ab7285dc97680b1e835de563fbaa04c5b8cb6af56fdf08c9134",
+        "sha256_in_prefix": "3e60486dd16a1ab7285dc97680b1e835de563fbaa04c5b8cb6af56fdf08c9134",
+        "size_in_bytes": 7171176
+      },
+      {
+        "_path": "annotation/hg38_RefSeq_exon.txt",
+        "path_type": "hardlink",
+        "sha256": "787ff872da70d13536ad0db516767fe014324acf13fe4af9d0c12b8ad2041ad5",
+        "sha256_in_prefix": "787ff872da70d13536ad0db516767fe014324acf13fe4af9d0c12b8ad2041ad5",
+        "size_in_bytes": 8374242
+      },
+      {
+        "_path": "annotation/mm10_RefSeq_exon.txt",
+        "path_type": "hardlink",
+        "sha256": "fe5911031dfcda774badb4b029c2c10dd4b2b11a503a43526646a427ec164f91",
+        "sha256_in_prefix": "fe5911031dfcda774badb4b029c2c10dd4b2b11a503a43526646a427ec164f91",
+        "size_in_bytes": 7246621
+      },
+      {
+        "_path": "annotation/mm9_RefSeq_exon.txt",
+        "path_type": "hardlink",
+        "sha256": "fa187e4010c6dc8381fb8381f3acfff39ae7532b7925bfb196ae1ada92dec773",
+        "sha256_in_prefix": "fa187e4010c6dc8381fb8381f3acfff39ae7532b7925bfb196ae1ada92dec773",
+        "size_in_bytes": 7104174
+      },
+      {
+        "_path": "bin/detectionCall",
+        "path_type": "hardlink",
+        "sha256": "d3e1fdaacfc00c8bf59fa850731d59b12288c1c001dc83523b64fc141445f019",
+        "sha256_in_prefix": "d3e1fdaacfc00c8bf59fa850731d59b12288c1c001dc83523b64fc141445f019",
+        "size_in_bytes": 1997592
+      },
+      {
+        "_path": "bin/exactSNP",
+        "path_type": "hardlink",
+        "sha256": "3a0f1c2d720f3985a634fd6e199a83e3d0e8f6d76bfa8567b02a45ba92ca1586",
+        "sha256_in_prefix": "3a0f1c2d720f3985a634fd6e199a83e3d0e8f6d76bfa8567b02a45ba92ca1586",
+        "size_in_bytes": 2068264
+      },
+      {
+        "_path": "bin/featureCounts",
+        "file_mode": "binary",
+        "path_type": "hardlink",
+        "prefix_placeholder": "/opt/conda/conda-bld/subread_1553107834249/_h_env_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_place",
+        "sha256": "4b4dd6a4ac063ddf818c44f0f50ff1acdee5f98bac82c30fdc024febf244e492",
+        "sha256_in_prefix": "22d5e20111c2b14ad3f18de387055875268e36b39969cee21edf3ee9f3f3ab19",
+        "size_in_bytes": 2401328
+      },
+      {
+        "_path": "bin/flattenGTF",
+        "path_type": "hardlink",
+        "sha256": "40885d1f0e941b2577083ce56acc84f824bddd89d203fee12e993a601ee2d594",
+        "sha256_in_prefix": "40885d1f0e941b2577083ce56acc84f824bddd89d203fee12e993a601ee2d594",
+        "size_in_bytes": 1970120
+      },
+      {
+        "_path": "bin/genRandomReads",
+        "file_mode": "binary",
+        "path_type": "hardlink",
+        "prefix_placeholder": "/opt/conda/conda-bld/subread_1553107834249/_h_env_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_place",
+        "sha256": "be031ec1ff871722329b2a552e1ca56b595b72f64bc41846e554c727f4cbe06c",
+        "sha256_in_prefix": "8734d5ef02757bb5b0804aa2090f36e414c65b3ead790c3d588511a873f9410d",
+        "size_in_bytes": 2025960
+      },
+      {
+        "_path": "bin/propmapped",
+        "path_type": "hardlink",
+        "sha256": "3c8795ab64cc8475fd320f3deda7a8d284826732521838b2b210a75573988fb0",
+        "sha256_in_prefix": "3c8795ab64cc8475fd320f3deda7a8d284826732521838b2b210a75573988fb0",
+        "size_in_bytes": 1980464
+      },
+      {
+        "_path": "bin/qualityScores",
+        "file_mode": "binary",
+        "path_type": "hardlink",
+        "prefix_placeholder": "/opt/conda/conda-bld/subread_1553107834249/_h_env_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_place",
+        "sha256": "bdcaf6f246d18e7cf5fb5552aa8988b37474f7910ce9cee4ad2969a6af2e0c1a",
+        "sha256_in_prefix": "eed150c341e3ca9fc4aaae0b3ae323864dad163b2d2483ce419e536b089d77ab",
+        "size_in_bytes": 1988576
+      },
+      {
+        "_path": "bin/removeDup",
+        "file_mode": "binary",
+        "path_type": "hardlink",
+        "prefix_placeholder": "/opt/conda/conda-bld/subread_1553107834249/_h_env_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_place",
+        "sha256": "baada97dde6fbf2ab735b83a822f2ca0bdd703c31dac181aa4f49c9ec1221d4b",
+        "sha256_in_prefix": "dc57d16a11975ffcbd6a197180ddfbfdd1834143ac0d69f6640643bb49991e01",
+        "size_in_bytes": 1975000
+      },
+      {
+        "_path": "bin/repair",
+        "file_mode": "binary",
+        "path_type": "hardlink",
+        "prefix_placeholder": "/opt/conda/conda-bld/subread_1553107834249/_h_env_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_place",
+        "sha256": "97b4d7bd0d749e974b575fd4c59169cfbea0629f3512c8884488503901502de1",
+        "sha256_in_prefix": "e6040b8c00cb801c4088e7c643a7d3bf77fa9e1ad606710e1d189718bf64696e",
+        "size_in_bytes": 1966616
+      },
+      {
+        "_path": "bin/subindel",
+        "file_mode": "binary",
+        "path_type": "hardlink",
+        "prefix_placeholder": "/opt/conda/conda-bld/subread_1553107834249/_h_env_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_place",
+        "sha256": "b7c84f4fc9b1fc6fa9d821343d83d73e3c5eaf4d392eded0e69ddec6c95cc07b",
+        "sha256_in_prefix": "13e0cae4040bfdf5c3702153858bed4aec2974bc61a3a9b434fd37c1d1dd3b7f",
+        "size_in_bytes": 1976352
+      },
+      {
+        "_path": "bin/subjunc",
+        "file_mode": "binary",
+        "path_type": "hardlink",
+        "prefix_placeholder": "/opt/conda/conda-bld/subread_1553107834249/_h_env_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_place",
+        "sha256": "9e878ac25cd4f9b52a6462e523475a86109ac43f8be214d72969d3273932d47b",
+        "sha256_in_prefix": "f68f3a8e5d13f64edece6a69d67dcd8cfd0e4e96f35c5cb7a8dd2c72cf925f3e",
+        "size_in_bytes": 2004672
+      },
+      {
+        "_path": "bin/sublong",
+        "file_mode": "binary",
+        "path_type": "hardlink",
+        "prefix_placeholder": "/opt/conda/conda-bld/subread_1553107834249/_h_env_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_place",
+        "sha256": "e24ff442b535d8dd4506a642842a1b3740c39108e51a0f707fd9a48a02a636dc",
+        "sha256_in_prefix": "93ce3b87aba45cf43ca3a7d99d158a286d6645f0fd1bc4f5b49e23a810eff1ad",
+        "size_in_bytes": 336360
+      },
+      {
+        "_path": "bin/subread-align",
+        "file_mode": "binary",
+        "path_type": "hardlink",
+        "prefix_placeholder": "/opt/conda/conda-bld/subread_1553107834249/_h_env_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_place",
+        "sha256": "6c3bd7cb0ae2ecef126c24806f21e757c53caa9a8f6eb9c27ff7cf3f144a059c",
+        "sha256_in_prefix": "e1332f413b73b75c6ca93aa309debd6d713ac20895b6ea2f768cada36476360e",
+        "size_in_bytes": 2004240
+      },
+      {
+        "_path": "bin/subread-buildindex",
+        "file_mode": "binary",
+        "path_type": "hardlink",
+        "prefix_placeholder": "/opt/conda/conda-bld/subread_1553107834249/_h_env_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_placehold_place",
+        "sha256": "8e7320be3d8ec40d4d36a4f511ca12566bd028bec718456f71434f31bd710776",
+        "sha256_in_prefix": "f815c5aabf8e46b84fa05bf85c1231c8d20f5cf70ac340f319529051b07fd69f",
+        "size_in_bytes": 2021904
+      },
+      {
+        "_path": "bin/subread-fullscan",
+        "path_type": "hardlink",
+        "sha256": "30b9f32f56183e155339dff899ca8b04fa6497a2007e4b7f90ad2a583dfe7ba9",
+        "sha256_in_prefix": "30b9f32f56183e155339dff899ca8b04fa6497a2007e4b7f90ad2a583dfe7ba9",
+        "size_in_bytes": 1968264
+      },
+      {
+        "_path": "bin/txUnique",
+        "path_type": "hardlink",
+        "sha256": "70743e2691304a277ebe8ff1abce0c72433e6d992659fea6f6853acc7e692691",
+        "sha256_in_prefix": "70743e2691304a277ebe8ff1abce0c72433e6d992659fea6f6853acc7e692691",
+        "size_in_bytes": 1985976
+      }
+    ],
+    "paths_version": 1
+  },
+  "requested_spec": "subread==1.6.4=h84994c4_1",
+  "sha256": "43ba9ea0857e0f7717dd1802d514ea16cfe48666dcd5b2baf8f9150e6ee1fc7e",
+  "size": 20666826,
+  "subdir": "linux-64",
+  "timestamp": 1553107905339,
+  "track_features": "",
+  "url": "https://conda.anaconda.org/bioconda/linux-64/subread-1.6.4-h84994c4_1.tar.bz2",
+  "version": "1.6.4"
+}

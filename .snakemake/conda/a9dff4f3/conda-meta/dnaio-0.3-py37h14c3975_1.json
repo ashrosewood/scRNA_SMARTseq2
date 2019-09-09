@@ -1,0 +1,205 @@
+{
+  "build": "py37h14c3975_1",
+  "build_number": 1,
+  "channel": "https://conda.anaconda.org/bioconda/linux-64",
+  "constrains": [],
+  "depends": [
+    "libgcc-ng >=7.3.0",
+    "python >=3.7,<3.8.0a0",
+    "xopen >=0.5.0"
+  ],
+  "extracted_package_dir": "/home/users/doe/miniconda3/pkgs/dnaio-0.3-py37h14c3975_1",
+  "features": "",
+  "files": [
+    "lib/python3.7/site-packages/dnaio-0.3.dist-info/INSTALLER",
+    "lib/python3.7/site-packages/dnaio-0.3.dist-info/LICENSE",
+    "lib/python3.7/site-packages/dnaio-0.3.dist-info/METADATA",
+    "lib/python3.7/site-packages/dnaio-0.3.dist-info/RECORD",
+    "lib/python3.7/site-packages/dnaio-0.3.dist-info/WHEEL",
+    "lib/python3.7/site-packages/dnaio-0.3.dist-info/top_level.txt",
+    "lib/python3.7/site-packages/dnaio/__init__.py",
+    "lib/python3.7/site-packages/dnaio/__pycache__/__init__.cpython-37.pyc",
+    "lib/python3.7/site-packages/dnaio/__pycache__/_util.cpython-37.pyc",
+    "lib/python3.7/site-packages/dnaio/__pycache__/_version.cpython-37.pyc",
+    "lib/python3.7/site-packages/dnaio/__pycache__/chunks.cpython-37.pyc",
+    "lib/python3.7/site-packages/dnaio/__pycache__/exceptions.cpython-37.pyc",
+    "lib/python3.7/site-packages/dnaio/__pycache__/readers.cpython-37.pyc",
+    "lib/python3.7/site-packages/dnaio/__pycache__/writers.cpython-37.pyc",
+    "lib/python3.7/site-packages/dnaio/_core.cpython-37m-x86_64-linux-gnu.so",
+    "lib/python3.7/site-packages/dnaio/_util.py",
+    "lib/python3.7/site-packages/dnaio/_version.py",
+    "lib/python3.7/site-packages/dnaio/chunks.py",
+    "lib/python3.7/site-packages/dnaio/exceptions.py",
+    "lib/python3.7/site-packages/dnaio/readers.py",
+    "lib/python3.7/site-packages/dnaio/writers.py"
+  ],
+  "fn": "dnaio-0.3-py37h14c3975_1.tar.bz2",
+  "license": "MIT License",
+  "link": {
+    "source": "/home/users/doe/miniconda3/pkgs/dnaio-0.3-py37h14c3975_1",
+    "type": 1
+  },
+  "md5": "d58d26d5cac1482ffbb60c91a31a9222",
+  "name": "dnaio",
+  "package_tarball_full_path": "/home/users/doe/miniconda3/pkgs/dnaio-0.3-py37h14c3975_1.tar.bz2",
+  "paths_data": {
+    "paths": [
+      {
+        "_path": "lib/python3.7/site-packages/dnaio-0.3.dist-info/INSTALLER",
+        "path_type": "hardlink",
+        "sha256": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508",
+        "sha256_in_prefix": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508",
+        "size_in_bytes": 4
+      },
+      {
+        "_path": "lib/python3.7/site-packages/dnaio-0.3.dist-info/LICENSE",
+        "path_type": "hardlink",
+        "sha256": "59eaf771f54e4f146c291066d7f786355a6befeb4c7cbd93c222bb7b420709a3",
+        "sha256_in_prefix": "59eaf771f54e4f146c291066d7f786355a6befeb4c7cbd93c222bb7b420709a3",
+        "size_in_bytes": 1092
+      },
+      {
+        "_path": "lib/python3.7/site-packages/dnaio-0.3.dist-info/METADATA",
+        "path_type": "hardlink",
+        "sha256": "affcac9b93da7464e4f5b1ca60f9513db31dccd00e117c1b66e1710d43072aef",
+        "sha256_in_prefix": "affcac9b93da7464e4f5b1ca60f9513db31dccd00e117c1b66e1710d43072aef",
+        "size_in_bytes": 2175
+      },
+      {
+        "_path": "lib/python3.7/site-packages/dnaio-0.3.dist-info/RECORD",
+        "path_type": "hardlink",
+        "sha256": "891ca12c646e81d311120f2925873940da26e07f00d3be71b1d60b6df8f2d995",
+        "sha256_in_prefix": "891ca12c646e81d311120f2925873940da26e07f00d3be71b1d60b6df8f2d995",
+        "size_in_bytes": 1386
+      },
+      {
+        "_path": "lib/python3.7/site-packages/dnaio-0.3.dist-info/WHEEL",
+        "path_type": "hardlink",
+        "sha256": "a21c9b46e7b96cf479310512abb73a00697e88801dd0c5edfec7f261367546af",
+        "sha256_in_prefix": "a21c9b46e7b96cf479310512abb73a00697e88801dd0c5edfec7f261367546af",
+        "size_in_bytes": 104
+      },
+      {
+        "_path": "lib/python3.7/site-packages/dnaio-0.3.dist-info/top_level.txt",
+        "path_type": "hardlink",
+        "sha256": "21a946484e68d8c49a3b9d4342339d06d10225ce17b6dcbf04b441176a5f26ce",
+        "sha256_in_prefix": "21a946484e68d8c49a3b9d4342339d06d10225ce17b6dcbf04b441176a5f26ce",
+        "size_in_bytes": 6
+      },
+      {
+        "_path": "lib/python3.7/site-packages/dnaio/__init__.py",
+        "path_type": "hardlink",
+        "sha256": "a7bc4877531a3c8467a49a5cb0736b4ae2cf6863bbfc88d56e603db5ecb7bb9f",
+        "sha256_in_prefix": "a7bc4877531a3c8467a49a5cb0736b4ae2cf6863bbfc88d56e603db5ecb7bb9f",
+        "size_in_bytes": 11428
+      },
+      {
+        "_path": "lib/python3.7/site-packages/dnaio/__pycache__/__init__.cpython-37.pyc",
+        "path_type": "hardlink",
+        "sha256": "22e0796b611e18e5dbabe890d25b5484c3e657fcdfdbaba70fe2cf4c06722118",
+        "sha256_in_prefix": "22e0796b611e18e5dbabe890d25b5484c3e657fcdfdbaba70fe2cf4c06722118",
+        "size_in_bytes": 10472
+      },
+      {
+        "_path": "lib/python3.7/site-packages/dnaio/__pycache__/_util.cpython-37.pyc",
+        "path_type": "hardlink",
+        "sha256": "6f77cb43ce02a466f7b6e60c2c59e11320735cf96b3290d90aaf08355b0ccd6b",
+        "sha256_in_prefix": "6f77cb43ce02a466f7b6e60c2c59e11320735cf96b3290d90aaf08355b0ccd6b",
+        "size_in_bytes": 376
+      },
+      {
+        "_path": "lib/python3.7/site-packages/dnaio/__pycache__/_version.cpython-37.pyc",
+        "path_type": "hardlink",
+        "sha256": "b58128213abdac67b5369234704ce108a25ade496a983969cf21e4da17d94722",
+        "sha256_in_prefix": "b58128213abdac67b5369234704ce108a25ade496a983969cf21e4da17d94722",
+        "size_in_bytes": 450
+      },
+      {
+        "_path": "lib/python3.7/site-packages/dnaio/__pycache__/chunks.cpython-37.pyc",
+        "path_type": "hardlink",
+        "sha256": "619f585ef5140ec06551de2dee148b19ef148e4084bac083e8eb05e4e52cce6b",
+        "sha256_in_prefix": "619f585ef5140ec06551de2dee148b19ef148e4084bac083e8eb05e4e52cce6b",
+        "size_in_bytes": 3099
+      },
+      {
+        "_path": "lib/python3.7/site-packages/dnaio/__pycache__/exceptions.cpython-37.pyc",
+        "path_type": "hardlink",
+        "sha256": "1b3c0e9c67ec18b882546f479a9c978f3a86870300fd6080b09698a612648d14",
+        "sha256_in_prefix": "1b3c0e9c67ec18b882546f479a9c978f3a86870300fd6080b09698a612648d14",
+        "size_in_bytes": 1367
+      },
+      {
+        "_path": "lib/python3.7/site-packages/dnaio/__pycache__/readers.cpython-37.pyc",
+        "path_type": "hardlink",
+        "sha256": "c95c842edd97936d926c122bb075f29bae9b339974ae66d0b44f04e91aeffa15",
+        "sha256_in_prefix": "c95c842edd97936d926c122bb075f29bae9b339974ae66d0b44f04e91aeffa15",
+        "size_in_bytes": 3856
+      },
+      {
+        "_path": "lib/python3.7/site-packages/dnaio/__pycache__/writers.cpython-37.pyc",
+        "path_type": "hardlink",
+        "sha256": "db944f7f877cea2b9de64462c81a964c42ee9b9892f3609634c4f2617c2c5165",
+        "sha256_in_prefix": "db944f7f877cea2b9de64462c81a964c42ee9b9892f3609634c4f2617c2c5165",
+        "size_in_bytes": 3598
+      },
+      {
+        "_path": "lib/python3.7/site-packages/dnaio/_core.cpython-37m-x86_64-linux-gnu.so",
+        "path_type": "hardlink",
+        "sha256": "c97680a1c0d097410470cd87de909d05f61e263999bf1aad02b9b4afc96320fa",
+        "sha256_in_prefix": "c97680a1c0d097410470cd87de909d05f61e263999bf1aad02b9b4afc96320fa",
+        "size_in_bytes": 293848
+      },
+      {
+        "_path": "lib/python3.7/site-packages/dnaio/_util.py",
+        "path_type": "hardlink",
+        "sha256": "eb660892c6d560ce3a2d3daa6497a564170abba5e1ebe7ee5733f168f5536b97",
+        "sha256_in_prefix": "eb660892c6d560ce3a2d3daa6497a564170abba5e1ebe7ee5733f168f5536b97",
+        "size_in_bytes": 203
+      },
+      {
+        "_path": "lib/python3.7/site-packages/dnaio/_version.py",
+        "path_type": "hardlink",
+        "sha256": "d8d305302ffc0a437e15694e19045b7fb1a7a298231ef4ca8a2d1d5b984d3204",
+        "sha256_in_prefix": "d8d305302ffc0a437e15694e19045b7fb1a7a298231ef4ca8a2d1d5b984d3204",
+        "size_in_bytes": 495
+      },
+      {
+        "_path": "lib/python3.7/site-packages/dnaio/chunks.py",
+        "path_type": "hardlink",
+        "sha256": "dca2ca569cb7e803a8dcec303fa36c8b273a03de2080950be164974e1f374a7a",
+        "sha256_in_prefix": "dca2ca569cb7e803a8dcec303fa36c8b273a03de2080950be164974e1f374a7a",
+        "size_in_bytes": 4349
+      },
+      {
+        "_path": "lib/python3.7/site-packages/dnaio/exceptions.py",
+        "path_type": "hardlink",
+        "sha256": "79212ff711013d6c4cd5f860a8f8aa991ee51c6779adce5ab71cf453307035bd",
+        "sha256_in_prefix": "79212ff711013d6c4cd5f860a8f8aa991ee51c6779adce5ab71cf453307035bd",
+        "size_in_bytes": 745
+      },
+      {
+        "_path": "lib/python3.7/site-packages/dnaio/readers.py",
+        "path_type": "hardlink",
+        "sha256": "40593fa028356195571730ab7699bc7a7bfb242bdf9a0364e3cb246166cdc675",
+        "sha256_in_prefix": "40593fa028356195571730ab7699bc7a7bfb242bdf9a0364e3cb246166cdc675",
+        "size_in_bytes": 3885
+      },
+      {
+        "_path": "lib/python3.7/site-packages/dnaio/writers.py",
+        "path_type": "hardlink",
+        "sha256": "5e1c0fdf0120de5910b957c2ff66a7b9e3f9599784584acf7c9574e13651524d",
+        "sha256_in_prefix": "5e1c0fdf0120de5910b957c2ff66a7b9e3f9599784584acf7c9574e13651524d",
+        "size_in_bytes": 3022
+      }
+    ],
+    "paths_version": 1
+  },
+  "requested_spec": "dnaio==0.3=py37h14c3975_1",
+  "sha256": "52faecb9fd9288a9626f12d8c430c46fcb2c31cbc8bd1666b643d20f9e5ff38e",
+  "size": 132584,
+  "subdir": "linux-64",
+  "timestamp": 1554214687034,
+  "track_features": "",
+  "url": "https://conda.anaconda.org/bioconda/linux-64/dnaio-0.3-py37h14c3975_1.tar.bz2",
+  "version": "0.3"
+}

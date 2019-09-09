@@ -1,0 +1,6 @@
+/home/groups/CEDAR/doe/methylome-pipeline/scNMT_transcriptomeMapping/.snakemake/conda/4f909bd8/lib/site_perl/5.26.2/GD/Text.pm relocate_as=../../../../GD/Text.pm
+/home/groups/CEDAR/doe/methylome-pipeline/scNMT_transcriptomeMapping/.snakemake/conda/4f909bd8/lib/site_perl/5.26.2/GD/Text/Align.pm relocate_as=../../../../GD/Text/Align.pm
+/home/groups/CEDAR/doe/methylome-pipeline/scNMT_transcriptomeMapping/.snakemake/conda/4f909bd8/lib/site_perl/5.26.2/GD/Text/Wrap.pm relocate_as=../../../../GD/Text/Wrap.pm
+/home/groups/CEDAR/doe/methylome-pipeline/scNMT_transcriptomeMapping/.snakemake/conda/4f909bd8/man/man3/GD::Text.3 relocate_as=../../../../../../../man/man3/GD::Text.3
+/home/groups/CEDAR/doe/methylome-pipeline/scNMT_transcriptomeMapping/.snakemake/conda/4f909bd8/man/man3/GD::Text::Align.3 relocate_as=../../../../../../../man/man3/GD::Text::Align.3
+/home/groups/CEDAR/doe/methylome-pipeline/scNMT_transcriptomeMapping/.snakemake/conda/4f909bd8/man/man3/GD::Text::Wrap.3 relocate_as=../../../../../../../man/man3/GD::Text::Wrap.3

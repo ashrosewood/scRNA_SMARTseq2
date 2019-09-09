@@ -45,7 +45,7 @@ rule Hisat2:
         "samples/trimmed/{sample}_R1_val_1.fq.gz",
 	"samples/trimmed/{sample}_R2_val_2.fq.gz"
     output:
-        "samples/hisat2/{sample}_output.sam"
+        "samples/hisat2/{sample}_output.bam"
     threads: 12
     params:
         gtf=config["gtf_file"]
@@ -57,13 +57,13 @@ rule Hisat2:
                 {HiSat2} -q -x {pathToGenomeIndex} \
                 -1 {input[0]} -2 {input[1]} -p {threads} \
                 --dta --sp 1000,1000 --no-mixed \
-                --no-discordant -S {output}           
+                --no-discordant -S {output} | samtools view -Sbh > samples/hisat2/{wildcards.sample}_output.bam          
                 """)
 
 
 rule feature_count:
     input:
-        expand("samples/hisat2/{sample}_output.sam", sample = SAMPLES)
+        expand("samples/hisat2/{sample}_output.bam", sample = SAMPLES)
     output:
         "data/{project_id}_counts.txt".format(project_id=config["project_id"]),
         "data/{project_id}_counts.txt.summary".format(project_id=config["project_id"])

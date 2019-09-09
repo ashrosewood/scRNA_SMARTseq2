@@ -1,0 +1,135 @@
+{
+  "build": "pl526_0",
+  "build_number": 0,
+  "channel": "https://conda.anaconda.org/bioconda/linux-64",
+  "constrains": [],
+  "depends": [
+    "bowtie",
+    "bowtie2",
+    "perl >=5.26.2,<5.26.3.0a0",
+    "perl-gdgraph"
+  ],
+  "extracted_package_dir": "/home/users/doe/miniconda3/pkgs/fastq-screen-0.13.0-pl526_0",
+  "features": "",
+  "files": [
+    "bin/fastq_screen",
+    "share/fastq-screen-0.13.0-0/FastQ_Screen_Logo.png",
+    "share/fastq-screen-0.13.0-0/OpenSans-Regular.ttf",
+    "share/fastq-screen-0.13.0-0/README.txt",
+    "share/fastq-screen-0.13.0-0/RELEASE_NOTES.txt",
+    "share/fastq-screen-0.13.0-0/conda_build.sh",
+    "share/fastq-screen-0.13.0-0/fastq_screen",
+    "share/fastq-screen-0.13.0-0/fastq_screen.conf.example",
+    "share/fastq-screen-0.13.0-0/fastq_screen_documentation.md",
+    "share/fastq-screen-0.13.0-0/fastq_screen_summary_template.html",
+    "share/fastq-screen-0.13.0-0/interactive_graphs.js",
+    "share/fastq-screen-0.13.0-0/license.txt"
+  ],
+  "fn": "fastq-screen-0.13.0-pl526_0.tar.bz2",
+  "license": "GPLv3",
+  "link": {
+    "source": "/home/users/doe/miniconda3/pkgs/fastq-screen-0.13.0-pl526_0",
+    "type": 1
+  },
+  "md5": "5d1c72301745d8bd9dc9fe017f932aec",
+  "name": "fastq-screen",
+  "package_tarball_full_path": "/home/users/doe/miniconda3/pkgs/fastq-screen-0.13.0-pl526_0.tar.bz2",
+  "paths_data": {
+    "paths": [
+      {
+        "_path": "bin/fastq_screen",
+        "path_type": "softlink",
+        "sha256": "336a631a5c9d92bc474cc7921895a049b6e661f84cb4efa0e909913fafd99132",
+        "size_in_bytes": 102502
+      },
+      {
+        "_path": "share/fastq-screen-0.13.0-0/FastQ_Screen_Logo.png",
+        "path_type": "hardlink",
+        "sha256": "ae9f667279bce846e9f5dcaffbf90374fd4f0c22f2c276e4c9b42c6ad4386c23",
+        "sha256_in_prefix": "ae9f667279bce846e9f5dcaffbf90374fd4f0c22f2c276e4c9b42c6ad4386c23",
+        "size_in_bytes": 450389
+      },
+      {
+        "_path": "share/fastq-screen-0.13.0-0/OpenSans-Regular.ttf",
+        "path_type": "hardlink",
+        "sha256": "e64e508b2aa2880f907e470c4550980ec4c0694d103a43f36150ac3f93189bee",
+        "sha256_in_prefix": "e64e508b2aa2880f907e470c4550980ec4c0694d103a43f36150ac3f93189bee",
+        "size_in_bytes": 217360
+      },
+      {
+        "_path": "share/fastq-screen-0.13.0-0/README.txt",
+        "path_type": "hardlink",
+        "sha256": "75672d2d9d0985c0450adcddd2310ed316fb6e1e9f4084b261eb5445d14a7c70",
+        "sha256_in_prefix": "75672d2d9d0985c0450adcddd2310ed316fb6e1e9f4084b261eb5445d14a7c70",
+        "size_in_bytes": 738
+      },
+      {
+        "_path": "share/fastq-screen-0.13.0-0/RELEASE_NOTES.txt",
+        "path_type": "hardlink",
+        "sha256": "c4ec1aaacb683e5821fb848461574d94386afeee38cc191f00fe67fe50f91683",
+        "sha256_in_prefix": "c4ec1aaacb683e5821fb848461574d94386afeee38cc191f00fe67fe50f91683",
+        "size_in_bytes": 15872
+      },
+      {
+        "_path": "share/fastq-screen-0.13.0-0/conda_build.sh",
+        "file_mode": "text",
+        "path_type": "hardlink",
+        "prefix_placeholder": "/opt/anaconda1anaconda2anaconda3",
+        "sha256": "c5c08776d0b2b9268277c23008a738ac1249960cbed0571d7877cdd741100f67",
+        "sha256_in_prefix": "58d719696807f451080d120ac6b947e2e3b583380cc00f4594e7a22fc171d238",
+        "size_in_bytes": 7754
+      },
+      {
+        "_path": "share/fastq-screen-0.13.0-0/fastq_screen",
+        "path_type": "hardlink",
+        "sha256": "336a631a5c9d92bc474cc7921895a049b6e661f84cb4efa0e909913fafd99132",
+        "sha256_in_prefix": "336a631a5c9d92bc474cc7921895a049b6e661f84cb4efa0e909913fafd99132",
+        "size_in_bytes": 102502
+      },
+      {
+        "_path": "share/fastq-screen-0.13.0-0/fastq_screen.conf.example",
+        "path_type": "hardlink",
+        "sha256": "aace4f434440672cab0282fafbb573f4837bc0da34ef3ceca1d10c01e3984949",
+        "sha256_in_prefix": "aace4f434440672cab0282fafbb573f4837bc0da34ef3ceca1d10c01e3984949",
+        "size_in_bytes": 3382
+      },
+      {
+        "_path": "share/fastq-screen-0.13.0-0/fastq_screen_documentation.md",
+        "path_type": "hardlink",
+        "sha256": "01099742a1aca5743e9715f149910e7f5aabb6a274b387be38e4994f3ce9a8f8",
+        "sha256_in_prefix": "01099742a1aca5743e9715f149910e7f5aabb6a274b387be38e4994f3ce9a8f8",
+        "size_in_bytes": 21537
+      },
+      {
+        "_path": "share/fastq-screen-0.13.0-0/fastq_screen_summary_template.html",
+        "path_type": "hardlink",
+        "sha256": "79e62a72efe5abe27d88f53b4d61ffc317fcaaf028c102cfb600d8de918d6e37",
+        "sha256_in_prefix": "79e62a72efe5abe27d88f53b4d61ffc317fcaaf028c102cfb600d8de918d6e37",
+        "size_in_bytes": 627439
+      },
+      {
+        "_path": "share/fastq-screen-0.13.0-0/interactive_graphs.js",
+        "path_type": "hardlink",
+        "sha256": "d2691a734ea2eefb08fc58b87e26f0c685b8546decec8b962468335b201dbac7",
+        "sha256_in_prefix": "d2691a734ea2eefb08fc58b87e26f0c685b8546decec8b962468335b201dbac7",
+        "size_in_bytes": 2734724
+      },
+      {
+        "_path": "share/fastq-screen-0.13.0-0/license.txt",
+        "path_type": "hardlink",
+        "sha256": "d0495053051967ebe76fb1facd287d79d1ed800da1be75cf501a556bc39a0472",
+        "sha256_in_prefix": "d0495053051967ebe76fb1facd287d79d1ed800da1be75cf501a556bc39a0472",
+        "size_in_bytes": 32471
+      }
+    ],
+    "paths_version": 1
+  },
+  "requested_spec": "fastq-screen=0.13.0",
+  "sha256": "7b4c9533807eca123b6c5c0b4c17452142cd5d489f35623b0a181d9e0f7c068b",
+  "size": 1839607,
+  "subdir": "linux-64",
+  "timestamp": 1541094505797,
+  "track_features": "",
+  "url": "https://conda.anaconda.org/bioconda/linux-64/fastq-screen-0.13.0-pl526_0.tar.bz2",
+  "version": "0.13.0"
+}
