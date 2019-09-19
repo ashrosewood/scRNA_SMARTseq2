@@ -57,27 +57,29 @@ rule Hisat2:
                 {HiSat2} -q -x {pathToGenomeIndex} \
                 -1 {input[0]} -2 {input[1]} -p {threads} \
                 --dta --sp 1000,1000 --no-mixed \
-                --no-discordant -S {output} | samtools view -Sbh > samples/hisat2/{wildcards.sample}_output.bam          
-                """)
+                --no-discordant -S samples/hisat2/{wildcards.sample}_output.sam 
+		samtools view -S -b samples/hisat2/{wildcards.sample}_output.sam > {output}         
+                rm samples/hisat2/{wildcards.sample}_output.sam
+		""")
 
 
 rule feature_count:
     input:
         expand("samples/hisat2/{sample}_output.bam", sample = SAMPLES)
     output:
-        "data/{project_id}_counts.txt".format(project_id=config["project_id"]),
-        "data/{project_id}_counts.txt.summary".format(project_id=config["project_id"])
+        "data/counts/raw_counts_.tsv",
+        "data/counts/sample_metadata.tsv"
     conda:
         "../envs/featureCounts.yaml"
     shell:
-        """featureCounts -t exon -g gene_id -a /home/groups/CEDAR/anno/gtf/hg19_ens87.chr.gtf -o {output[0]} {input}"""
+        """Rscript scripts/feature_counts.R"""
 
 
 rule filter_counts:
     input:
-        countsFile="data/{project_id}_counts.txt".format(project_id=config["project_id"])
+        countsFile="data/counts/raw_counts_.tsv"
     output:
-        "data/{project_id}_counts.filt.txt".format(project_id=config["project_id"])
+        "data/counts/raw_counts_.filt.tsv"
     params:
         anno=config["filter_anno"],
         biotypes=config["biotypes"],
