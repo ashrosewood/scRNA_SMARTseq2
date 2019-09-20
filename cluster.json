@@ -49,5 +49,22 @@
         "o" : "logs/filter_counts/filter_counts_%j.out",
         "c" : 1,
         "mem":40000
+    },
+
+    "get_genes" :
+    {
+	"J" : "get_genes",
+	"e" : "logs/get_genes/get_genes_%j.err",
+	"o" : "logs/get_genes/get_genes_%j.out",
+	"c" : 1,
+	"mem" : 40000
+    },
+    "create_Seurat" :
+    {
+	"J" : "create_Seurat",
+	"e" : "logs/create_Seurat/create_Seurat_%j.err",
+	"o" : "logs/create_Seurat/create_Seurat_%j.out",
+	"c" : 1,
+	"mem" : 40000
     }
 }

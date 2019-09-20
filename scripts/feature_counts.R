@@ -7,11 +7,11 @@ fwrite_tsv <- partial(fwrite, sep = "\t", na = "NA")
 
 ## in/out ##
 io <- list()
-io$anno_infile <- "Box/My_NMT-seq_work/Stephen/code/MCF7_matched-selected/features/genes_hg19/Homo_sapiens.GRCh37.87.gtf.gz"
+io$anno_infile <- "/home/groups/CEDAR/anno/CellRanger/hg19/refdata-cellranger-hg19-3.0.0/genes/genes.gtf"
 #io$anno_infile <- "Box/My_NMT-seq_work/Stephen/code/MCF7_matched-selected/features/genes/Homo_sapiens.GRCh38.97.gtf.gz"
 
-io$samples_indir <- "Box/external/Stephen/MCF7_matched/Transcriptome"
-io$outdir <- "Box/My_NMT-seq_work/Stephen/code/MCF7_matched-selected/rna/counts_hg19"
+io$samples_indir <- "samples/hisat2"
+io$outdir <- "data/counts"
 
 ## Options ##
 opts <- list()
@@ -66,8 +66,8 @@ setcolorder(counts, gtools::mixedsort(colnames(counts)))
 ##################
 
 dir.create(io$outdir, recursive = TRUE)
-now <- format(Sys.time(), "%Y-%m-%d_%Hhr%M" )
-outfile <- paste0(io$outdir, "/raw_counts_", now, ".tsv") 
+#now <- format(Sys.time(), "%Y-%m-%d_%Hhr%M" )
+outfile <- paste0(io$outdir, "/raw_counts_", ".tsv") 
 
 
 fwrite_tsv(counts, outfile)

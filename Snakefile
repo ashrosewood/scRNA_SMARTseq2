@@ -56,9 +56,10 @@ rule all:
        expand("samples/fastqc/{sample}_R2_val_2_fastqc.{fastqc_ext}", sample = SAMPLES, fastqc_ext=fastqc_ext),
        expand("samples/fastqscreen/{sample}/{sample}_R1_val_1_screen.{fastqscreen_ext}", sample=SAMPLES, fastqscreen_ext=fastqscreen_ext),
        expand("samples/fastqscreen/{sample}/{sample}_R2_val_2_screen.{fastqscreen_ext}", sample=SAMPLES, fastqscreen_ext=fastqscreen_ext),
-       expand("data/{project_id}_counts.txt.summary".format(project_id=project_id)),
-       expand("data/{project_id}_counts.filt.txt".format(project_id=project_id)),
-        
+       "data/counts/raw_counts_.filt.tsv",
+       "data/counts/sample_metadata.tsv",
+       "data/SeuratObject.rds"	        
         
 
 include: "rules/align_rmdp.smk"
+include: "rules/analysis.smk"

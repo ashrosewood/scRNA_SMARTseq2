@@ -1,10 +1,14 @@
 annoFile = snakemake@params[['anno']]
+#annoFile <- "/home/groups/CEDAR/anno/biomaRt/hg19.Ens_87.biomaRt.geneAnno.Rdata"
 
 biotypes <- snakemake@params[['biotypes']]
+#biotypes <- "protein_coding"
 
 countsFile <- snakemake@input[['countsFile']]
+#countsFile <- "../data/counts/raw_counts_.tsv"
 
 mito <- snakemake@params[['mito']]
+#mito <- 1
 
 counts <- read.table(file=countsFile, sep = "\t", header = T, skip = 1)
 
@@ -31,12 +35,12 @@ counts$Genes     <- "Not_in_anno"
 if( sum(! paste(counts$Geneid) %in% paste(anno$ensembl_gene_id) ) > 0 ){
     print( "not all ensembl ids in counts in annoFile" )
     for (i in seq(1:length(counts$Genes))) {
-        if (counts$Geneid[i] %in% names(test_list)) {
-            counts$Genes[i] <- test_list[ paste(counts$Geneid[i]) ]
+        if (counts$ens_id[i] %in% names(test_list)) {
+            counts$Genes[i] <- test_list[ paste(counts$ens_id[i]) ]
         }
     }
 }else{
-    iv           <- match( paste(counts$Geneid) , paste(anno$ensembl_gene_id) )
+    iv           <- match( paste(counts$ens_id) , paste(anno$ensembl_gene_id) )
     counts$Genes <- anno[iv,"external_gene_name"]
 }
 
@@ -56,21 +60,21 @@ if(mito==1){
 
 #---------------clean up the counts names------------------#
 
-if( length(grep("samples.hisat2.|_output.sam",names(counts.sub)) ) > 0 ){
-    names(counts.sub) <- gsub("samples.hisat2.|_output.sam", "", names(counts.sub) )
+if( length(sub('.*\\.','',names(counts.sub)) > 0 )){
+    names(counts.sub) <- sub('.*\\.','',names(counts.sub))
 }
 
 # take chrom name
-counts.sub$Chr    <- sub("\\;.*", "", paste(counts.sub$Chr))
+#counts.sub$Chr    <- sub("\\;.*", "", paste(counts.sub$Chr))
 
 # take the first Etart
-counts.sub$Start  <- sub("\\;.*", "", paste(counts.sub$Start))
+#counts.sub$Start  <- sub("\\;.*", "", paste(counts.sub$Start))
 
 # take the last End
-counts.sub$End    <- sub(".*\\;", "", paste(counts.sub$End))
+#counts.sub$End    <- sub(".*\\;", "", paste(counts.sub$End))
 
 # take the first strand
-counts.sub$Strand <- sub("\\;.*", "", paste(counts.sub$Strand))
+#counts.sub$Strand <- sub("\\;.*", "", paste(counts.sub$Strand))
 
 
-write.table(counts.sub, file=sub(".txt", ".filt.txt", countsFile), sep="\t", quote=FALSE, row.names=FALSE, col.names=TRUE)
+write.table(counts.sub, file=sub(".tsv", ".filt.tsv", countsFile), sep="\t", quote=FALSE, row.names=FALSE, col.names=TRUE)
