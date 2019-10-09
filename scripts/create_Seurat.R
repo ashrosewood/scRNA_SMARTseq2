@@ -5,6 +5,7 @@ library(scater)
 library(ggplot2)
 library(cowplot)
 library(png)
+library(dplyr)
 
 barplot_theme <- function() {
   p <- theme(
@@ -74,9 +75,12 @@ feature_metadata <- feature_metadata[genes,]
 counts <- counts[rownames(feature_metadata),]
 
 ## Create Seurat Object ##
+rownames(counts) <- feature_metadata[rownames(counts),3]
 
 SO <- CreateSeuratObject(counts = counts, min.cells = 5, min.features = opts$features_threshold)
-
+if ("M7C2" %in% SO$orig.ident) {
+SO <- subset(SO, orig.ident == "M7C2")
+}
 ## Calculate quality metrics ##
 
 SO[["percent.mt"]] <- PercentageFeatureSet(object = SO, pattern = "^MT-")
@@ -97,8 +101,43 @@ dev.off()
 
 SO <- NormalizeData(SO)
 SO <- FindVariableFeatures(object = SO, selection.method = "vst", nfeatures = 2000)
-all.genes <- rownames(x = SO)
-SO <- ScaleData(object = SO, features = all.genes)
+cc_genes <- read.table("data/regev_lab_cell_cycle_genes.txt")
+s.genes <- cc_genes$V1[1:43]
+g2m.genes <- cc_genes$V1[44:97]
+SO <- CellCycleScoring(SO, s.features = s.genes, g2m.features = g2m.genes)
+SO <- ScaleData(object = SO, features = rownames(SO), vars.to.regress=c("S.Score","G2M.Score"))
+SO <- RunPCA(SO, verbose = FALSE)
+SO <- FindNeighbors(SO, reduction = "pca", dims = 1:40)
+SO <- FindClusters(object = SO, resolution = 1.0)
+SO <- RunUMAP(SO, reduction = "pca", dims = 1:40)
+
+png("plots/SO_UMAP.png")
+DimPlot(SO, reduction = "umap", group.by = "seurat_clusters")
+dev.off()
+
+var_genes <- VariableFeatures(SO)
+write.table(var_genes, file = "tables/var_genes.tsv", sep = "\t", row.names=F, col.names=F, quote=F)
+
+## Plot Variable Genes ##
+
+top10 <- head(VariableFeatures(SO))
+plot1 <- VariableFeaturePlot(SO)
+plot2 <- LabelPoints(plot=plot1, points=top10, repel = TRUE)
+png("plots/var_genes_scatter.png")
+plot2
+dev.off()
+
+## Find DE genes
+
+SO.markers <- FindAllMarkers(SO, logfc.threshold = 0.2)
+top10 <- SO.markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_logFC)
+write.table(SO.markers, file = "tables/DE_genes.tsv", sep = "\t", row.names=F, quote=F)
+
+png("plots/DE_heatmap.png")
+DoHeatmap(SO, features = top10$gene) + NoLegend()
+dev.off()
+
+
 
 ## Save Seurat Object ##
 
