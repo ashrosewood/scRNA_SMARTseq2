@@ -15,7 +15,7 @@ timestamp = ('{:%Y-%m-%d_%H:%M:%S}'.format(datetime.datetime.now()))
 configfile:"omic_config.yaml"
 project_id = config["project_id"]
 
-SAMPLES, = glob_wildcards("samples/raw/{sample}_R1.fastq.gz")
+SAMPLES, = glob_wildcards("samples/raw/{sample}_R1.fq.gz")
 
 ext = ['r','pdf','xls']
 fastqscreen_ext = ['html','png','txt']
@@ -50,15 +50,20 @@ for sample in SAMPLES:
 
 rule all:
     input:
-       expand("samples/trimmed/{sample}_R1.fastq.gz_trimming_report.txt", sample = SAMPLES),
-       expand("samples/trimmed/{sample}_R2.fastq.gz_trimming_report.txt", sample = SAMPLES),
+       expand("samples/trimmed/{sample}_R1.fq.gz_trimming_report.txt", sample = SAMPLES),
+       expand("samples/trimmed/{sample}_R2.fq.gz_trimming_report.txt", sample = SAMPLES),
        expand("samples/fastqc/{sample}_R1_val_1_fastqc.{fastqc_ext}", sample = SAMPLES, fastqc_ext=fastqc_ext),
        expand("samples/fastqc/{sample}_R2_val_2_fastqc.{fastqc_ext}", sample = SAMPLES, fastqc_ext=fastqc_ext),
        expand("samples/fastqscreen/{sample}/{sample}_R1_val_1_screen.{fastqscreen_ext}", sample=SAMPLES, fastqscreen_ext=fastqscreen_ext),
        expand("samples/fastqscreen/{sample}/{sample}_R2_val_2_screen.{fastqscreen_ext}", sample=SAMPLES, fastqscreen_ext=fastqscreen_ext),
        "data/counts/raw_counts_.filt.tsv",
        "data/counts/sample_metadata.tsv",
-       "data/SeuratObject.rds"	        
+       "data/SeuratObject.rds",
+       "plots/SO_UMAP.png",
+       "plots/var_genes_scatter.png",
+       "plots/DE_heatmap.png",
+       "tables/DE_genes.tsv",
+       "tables/var_genes.tsv"
         
 
 include: "rules/align_rmdp.smk"
