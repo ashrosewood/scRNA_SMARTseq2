@@ -57,6 +57,7 @@ rule all:
        expand("samples/fastqscreen/{sample}/{sample}_R1_val_1_screen.{fastqscreen_ext}", sample=SAMPLES, fastqscreen_ext=fastqscreen_ext),
        expand("samples/fastqscreen/{sample}/{sample}_R2_val_2_screen.{fastqscreen_ext}", sample=SAMPLES, fastqscreen_ext=fastqscreen_ext),
        "data/counts/raw_counts_.filt.tsv",
+       "data/counts/raw_counts_.tsv.summary",
        "data/counts/sample_metadata.tsv",
        "data/SeuratObject.rds",
        "plots/SO_UMAP.png",
