@@ -1,7 +1,7 @@
 rule trimming:
     input:
-        "samples/raw/{sample}_R1.fastq.gz",
-	"samples/raw/{sample}_R2.fastq.gz"
+        "samples/raw/{sample}_R1.fq.gz",
+	"samples/raw/{sample}_R2.fq.gz"
     output:
         "samples/trimmed/{sample}_R1_val_1.fq.gz",
 	"samples/trimmed/{sample}_R2_val_2.fq.gz",
@@ -9,8 +9,8 @@ rule trimming:
 	"samples/fastqc/{sample}_R2_val_2_fastqc.zip",
         "samples/fastqc/{sample}_R1_val_1_fastqc.html",
 	"samples/fastqc/{sample}_R2_val_2_fastqc.html",
-        "samples/trimmed/{sample}_R1.fastq.gz_trimming_report.txt",
-	"samples/trimmed/{sample}_R2.fastq.gz_trimming_report.txt"
+        "samples/trimmed/{sample}_R1.fq.gz_trimming_report.txt",
+	"samples/trimmed/{sample}_R2.fq.gz_trimming_report.txt"
     params:
         adapter = config["adapter"]
     conda:
@@ -68,13 +68,20 @@ rule feature_count:
         expand("samples/hisat2/{sample}_output.bam", sample = SAMPLES)
     output:
         "data/counts/raw_counts_.tsv",
-        "data/counts/sample_metadata.tsv"
+        "data/counts/raw_counts_.tsv.summary"
     conda:
         "../envs/featureCounts.yaml"
     shell:
-        """Rscript scripts/feature_counts.R"""
+        """featureCounts -t exon -g gene_id -a /home/groups/CEDAR/anno/gtf/hg19_ens87.chr.gtf -o {output[0]} {input}"""
 
-
+rule create_meta:
+    input:
+        "data/counts/raw_counts_.tsv"
+    output:
+        "data/counts/sample_metdata.tsv"
+    shell:
+        """Rscript""" ###ADD R SCRIPT TO CREATE FILE
+	
 rule filter_counts:
     input:
         countsFile="data/counts/raw_counts_.tsv"
