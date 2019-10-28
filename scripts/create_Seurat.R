@@ -1,3 +1,59 @@
+coverage_threshold = snakemake@params[['coverage_threshold']]
+
+#setwd("../")
+#coverage_threshold <- 2e5    # Minimum library size (coverage)
+
+features_threshold = snakemake@params[['features_threshold']]
+#features_threshold <- 1000   # Minimum number of expressed features
+
+top50_threshold = snakemake@params[['top50_threshold']]
+#top50_threshold <- 0.75      # Maximum fraction of reads accounting for the top 50 features
+
+Feature_lowerQuantile = snakemake@params[['Feature_lowerQuantile']]
+#Feature_lowerQuantile <- .01
+
+Feature_upperQuantile = snakemake@params[['Feature_upperQuantile']]
+#Feature_upperQuantile <- .99
+
+Count_upperQuantile = snakemake@params[['Count_upperQuantile']]
+#Count_upperQuantile <- .99
+
+percentMT_upperQuantile = snakemake@params[['percentMT_upperQuantile']]
+#percentMT_upperQuantile <- .85
+
+opts <- list()
+opts$coverage_threshold <- coverage_threshold
+
+opts$features_threshold <- features_threshold
+
+opts$top50_threshold <- top50_threshold
+
+opts$Feature_lowerQuantile <- Feature_lowerQuantile
+
+opts$Feature_upperQuantile <- Feature_upperQuantile
+
+opts$Count_upperQuantile <- Count_upperQuantile
+
+opts$percentMT_upperQuantile <- percentMT_upperQuantile
+
+
+## I/O ##
+io <- list()
+io$in.gene_metadata   <- "data/gene_metadata.tsv"
+io$in.sample_metadata <- "data/counts/sample_metadata.tsv"
+io$in.raw_counts      <- "data/counts/raw_counts_.filt.tsv"
+io$out.file           <- "data/seurat/SeuratObject.rds"
+io$dataDir            <- "data/seurat"
+io$plotDir            <- "plots/seurat"
+
+if( !( file.exists(io$dataDir)) )  {
+    dir.create( io$dataDir, FALSE, TRUE )  
+}
+
+if(!( file.exists( io$plotDir ) ) ) {
+    dir.create( io$plotDir, FALSE, TRUE )  
+}
+
 library(Seurat)
 library(data.table)
 library(purrr)
@@ -29,116 +85,197 @@ barplot_theme <- function() {
 
 fread_df <- partial(fread, data.table = FALSE)
 
-## Options ##
-opts <- list()
-
-# Stringent thresholds
-#opts$coverage_threshold <- 2e5    # Minimum library size (coverage)
-#opts$features_threshold <- 1000   # Minimum number of expressed features
-#opts$top50_threshold <- 0.75      # Maximum fraction of reads accounting for the top 50 features
-
-# Lenient thresholds
-opts$coverage_threshold <- 1e3    # Minimum library size (coverage)
-opts$features_threshold <- 500   # Minimum number of expressed features
-opts$top50_threshold <- 0.75      # Maximum fraction of reads accounting for the top 50 features
-
-# Seurat Lenient Thresholds
-opts$Feature_lowerQuantile <- .01
-opts$Feature_upperQuantile <- .99
-opts$Count_upperQuantile <- .99
-opts$percentMT_upperQuantile <- .95
-
-
-opts$MT_threshold <- 0.25         # Maximum fraction of reads mapping to mithocondrial genes
-
-## I/O ##
-io <- list()
-io$in.gene_metadata <- "data/gene_hg19.cellRanger_metadata.tsv"
-#io$in.sample_metadata <- "Box/My_NMT-seq_work/Stephen/code/MCF7_matched-selected/rna/counts_hg19/sample_metadata.tsv"
-io$in.raw_counts <- "data/counts/raw_counts_.filt.tsv"
-io$out.file <- "data/SeuratObject.rds"
-#io$out.sample_metadata <- "Box/My_NMT-seq_work/Stephen/code/MCF7_matched-selected/sample_metadata.tsv"
-
-
-
 ## read in counts data and associated metadata ##
-
 counts <- fread_df(io$in.raw_counts) %>% 
-  tibble::column_to_rownames("ens_id") %>% 
-  as.matrix()
+    tibble::column_to_rownames("ens_id")
+counts$Genes <- NULL
 
-feature_metadata <- fread_df(io$in.gene_metadata)
+feature_metadata           <- fread_df(io$in.gene_metadata)
 rownames(feature_metadata) <- feature_metadata$ens_id
+stopifnot(rownames(counts) == feature_metadata$ens_id)
 
-genes <- rownames(feature_metadata[rownames(feature_metadata) %in% rownames(counts),])
-feature_metadata <- feature_metadata[genes,]
-counts <- counts[rownames(feature_metadata),]
+counts           <- as.matrix(counts)
+rownames(counts) <- feature_metadata$gene
+
+# should  all be equal now since made from the same table
+#if( ! all.equal(rownames(counts), rownames(feature_metadata)) ){
+#    print("rownames in metadata not in the same order as counts")
+#    genes            <- rownames(feature_metadata[rownames(feature_metadata) %in% rownames(counts),])
+#    feature_metadata <- feature_metadata[genes,]
+#    counts           <- counts[rownames(feature_metadata),]
+#}
 
 ## Create Seurat Object ##
-rownames(counts) <- feature_metadata[rownames(counts),3]
+#rownames(counts) <- feature_metadata[rownames(counts),3]
+SO <- CreateSeuratObject(counts = counts, min.cells = 0,
+                         min.features = 0)
 
-SO <- CreateSeuratObject(counts = counts, min.cells = 5, min.features = opts$features_threshold)
-if ("M7C2" %in% SO$orig.ident) {
-SO <- subset(SO, orig.ident == "M7C2")
-}
+## save unique gene ids  
+feature_metadata$gene_unique <- rownames(SO)
+
 ## Calculate quality metrics ##
+#mt <- feature_metadata[grep("^MT-", feature_metadata$gene), "ens_id"]
 
+## Calculate quality metrics ##
 SO[["percent.mt"]] <- PercentageFeatureSet(object = SO, pattern = "^MT-")
+#SO[["percent.mt"]] <- PercentageFeatureSet(object = SO, features = mt)
 
-png("plots/QC/pre_QCviolin.png")
+png(sub("$", "/pre_QCviolin.png", io$plotDir))
 VlnPlot(object=SO, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
 dev.off()
 
+############################
 ## Filter by library size ##
+############################
+libsize.drop <- SO$nCount_RNA < opts$coverage_threshold
+sum(libsize.drop)
 
-SO <- subset(x = SO, subset = nFeature_RNA >= quantile(SO$nFeature_RNA, opts$Feature_lowerQuantile) & nFeature_RNA <= quantile(SO$nFeature_RNA, opts$Feature_upperQuantile) & nCount_RNA <= quantile(SO$nCount_RNA, opts$Count_upperQuantile) & nCount_RNA >= opts$coverage_threshold & percent.mt <= quantile(SO$percent.mt, opts$percentMT_upperQuantile))
+SO$sample <- rownames(SO[[]])
 
-png("plots/QC/post_QCviolin.png")
+libsize.drop_dt <- data.table(
+  sample=SO$sample, 
+  size=SO$nCount_RNA, 
+  color=c("black","red")[as.numeric(libsize.drop)+1]
+) %>% setkey(size) %>% .[,col:=size] %>% .[,sample:=factor(sample,levels=sample)]
+
+p1 <- ggplot(libsize.drop_dt, aes(x=sample, y=size)) +
+  geom_bar(stat='identity', position="dodge", fill="#3CB54E") +
+  geom_hline(yintercept=opts$coverage_threshold, colour="black", linetype="dashed") +
+  scale_fill_gradient(low="red", high="green") +
+  labs(y="Library size") +
+  #barplot_theme() +
+  xlab(paste("Threshold", opts$coverage_threshold))+
+  theme(
+    legend.position = "none",
+    axis.title.x = element_text(size=rel(1.8)),
+    axis.title.y = element_text(size=rel(1.8)),
+    # axis.text.x = element_text(colour="black", color=foo$color, angle=90, size=10, vjust=0.5, hjust=1.0)
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank()
+  )
+print(p1)
+save_plot(sub("$", "/rna_libsize_barplot.pdf", io$plotDir), p1)
+
+######################################
+## Filter by number of expressed genes
+######################################
+feature.drop <- SO$nFeature_RNA < opts$features_threshold
+sum(feature.drop)
+
+feature.drop_dt <- data.table(
+  sample=SO$sample,
+  features = SO$nFeature_RNA, 
+  color = c("black","red")[as.numeric(feature.drop)+1]
+) %>% setkey(features) %>% .[,col:=features] %>% .[,sample:=factor(sample,levels=sample)]
+
+p2 <- ggplot(feature.drop_dt, aes(x=sample, y=features)) +
+  geom_bar(stat='identity', position="dodge", fill="#3CB54E") +
+  geom_hline(yintercept=opts$features_threshold, colour="black", linetype="dashed") +
+  # scale_fill_gradient(low="red", high="green") +
+  labs(y="Expressed genes") +
+  #barplot_theme() +
+  xlab(paste("Threshold", opts$coverage_threshold))+
+  theme(
+    legend.position = "none",
+    axis.title.x = element_text(size=rel(1.8)),
+    axis.title.y = element_text(size=rel(1.8)),
+    # axis.text.x = element_text(colour="black", color=foo$color, angle=90, size=10, vjust=0.5, hjust=1.0)
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank()
+  )
+print(p2)
+save_plot(sub("$", "/rna_features_barplot.pdf", io$plotDir), p2)
+
+#########
+## Subset
+#########
+
+SO <- subset(x = SO,
+             subset = nFeature_RNA >= quantile(SO$nFeature_RNA,
+                                               opts$Feature_lowerQuantile)
+             & nFeature_RNA <= quantile(SO$nFeature_RNA, opts$Feature_upperQuantile)
+             & nCount_RNA <= quantile(SO$nCount_RNA, opts$Count_upperQuantile)
+             & nCount_RNA >= opts$coverage_threshold
+             & percent.mt <= quantile(SO$percent.mt, opts$percentMT_upperQuantile))
+
+
+
+#SO <- subset(x = SO, subset = nFeature_RNA >= quantile(SO$nFeature_RNA, opts$Feature_lowerQuantile) & nFeature_RNA <= quantile(SO$nFeature_RNA, opts$Feature_upperQuantile) & nCount_RNA <= quantile(SO$nCount_RNA, opts$Count_upperQuantile) & nCount_RNA >= opts$coverage_threshold & percent.mt <= quantile(SO$percent.mt, opts$percentMT_upperQuantile))
+
+png(sub("$", "/post_QCviolin.png", io$plotDir))
 VlnPlot(object=SO, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
 dev.off()
 
+##############################
 ## Normalize and Scale Data ##
+##############################
+## need to add anchoring approach when we have multiple samples
+SO        <- NormalizeData(SO)
+SO        <- FindVariableFeatures(object = SO, selection.method = "vst", nfeatures = 2000)
 
-SO <- NormalizeData(SO)
-SO <- FindVariableFeatures(object = SO, selection.method = "vst", nfeatures = 2000)
-cc_genes <- read.table("data/regev_lab_cell_cycle_genes.txt")
-s.genes <- cc_genes$V1[1:43]
+## cell cycle scoring
+cc_genes  <- read.table("data/regev_lab_cell_cycle_genes.txt")
+s.genes   <- cc_genes$V1[1:43]
 g2m.genes <- cc_genes$V1[44:97]
-SO <- CellCycleScoring(SO, s.features = s.genes, g2m.features = g2m.genes)
-SO <- ScaleData(object = SO, features = rownames(SO), vars.to.regress=c("S.Score","G2M.Score"))
-SO <- RunPCA(SO, verbose = FALSE)
-SO <- FindNeighbors(SO, reduction = "pca", dims = 1:40)
-SO <- FindClusters(object = SO, resolution = 1.0)
-SO <- RunUMAP(SO, reduction = "pca", dims = 1:40)
 
-png("plots/SO_UMAP.png")
+#s.genes.ens   <- feature_metadata[feature_metadata$gene %in% s.genes,"ens_id"]
+#g2m.genes.ens <- feature_metadata[feature_metadata$gene %in% g2m.genes,"ens_id"]
+
+
+SO        <- CellCycleScoring(SO, s.features = s.genes, g2m.features = g2m.genes)
+SO        <- ScaleData(object = SO, features = rownames(SO), vars.to.regress=c("S.Score","G2M.Score"))
+
+SO        <- RunPCA(SO, approx = FALSE, verbose = FALSE)
+
+# Examine and visualize PCA results a few different ways
+                                        #print(x = SO[["pca"]], dims = 1:5, nfeatures = 5)
+if(dim(SO$pca)[2] >=6){
+    png(sub("$", "/post_dimHeatPCA.png", io$plotDir))
+    DimHeatmap(object = SO
+             , dims = 1:6, cells = 500, balanced = TRUE)
+    dev.off()
+}else{
+    png(sub("$", "/post_dimHeatPCA.png", io$plotDir))
+    DimHeatmap(object = SO
+             , dims = 1:dim(SO$pca)[2], cells = 500, balanced = TRUE)
+    dev.off()
+}
+
+## may want to add an option for ndims
+png(sub("$", "/post_elbowPlot.png", io$plotDir))
+ElbowPlot(object = SO, ndims = 60)
+dev.off()
+
+SO        <- FindNeighbors(SO, reduction = "pca", dims = 1:40)
+SO        <- FindClusters(object = SO, resolution = 1.0)
+SO        <- RunUMAP(SO, reduction = "pca", dims = 1:40)
+
+png(sub("$", "/post_SO_UMAP.png", io$plotDir))
 DimPlot(SO, reduction = "umap", group.by = "seurat_clusters")
 dev.off()
 
 var_genes <- VariableFeatures(SO)
-write.table(var_genes, file = "tables/var_genes.tsv", sep = "\t", row.names=F, col.names=F, quote=F)
+write.table(var_genes, file = "data/seurat/post_var_genes.tsv", sep = "\t", row.names=F, col.names=F, quote=F)
 
 ## Plot Variable Genes ##
 
 top10 <- head(VariableFeatures(SO))
 plot1 <- VariableFeaturePlot(SO)
 plot2 <- LabelPoints(plot=plot1, points=top10, repel = TRUE)
-png("plots/var_genes_scatter.png")
+
+png(sub("$", "/post_var_genes_scatter.png", io$plotDir))
 plot2
 dev.off()
 
 ## Find DE genes
 
 SO.markers <- FindAllMarkers(SO, logfc.threshold = 0.2)
-top10 <- SO.markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_logFC)
-write.table(SO.markers, file = "tables/DE_genes.tsv", sep = "\t", row.names=F, quote=F)
+top10      <- SO.markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_logFC)
+write.table(SO.markers, file = "data/seurat/post_DEgenes.tsv", sep = "\t", row.names=F, quote=F)
 
-png("plots/DE_heatmap.png")
+png(sub("$", "/post_DEheatmap.png", io$plotDir))
 DoHeatmap(SO, features = top10$gene) + NoLegend()
 dev.off()
 
-
-
 ## Save Seurat Object ##
-
 saveRDS(SO, io$out.file)

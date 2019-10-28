@@ -6,5 +6,3 @@ dependencies:
   - libgcc-ng=9.1.0=hdf63c60_0
   - subread=1.6.4=h84994c4_1
   - zlib=1.2.11=h7b6447c_3
-prefix: /home/users/doe/miniconda3/envs/Fcounts
-

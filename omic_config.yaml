@@ -54,4 +54,29 @@ assembly:
   hg19
 # remove mito genes (1/0)
 mito:
-  1
+  0
+
+#########################
+# Seurat-specific options
+#########################
+# Minimum library size (coverage)
+coverage_threshold:
+  2e5
+# Minimum number of expressed genes
+features_threshold:
+  1000   
+# Maximum fraction of reads accounting for the top 50 features
+top50_threshold:
+  0.75
+# Maximum fraction of reads mapping to mithocondrial genes
+MT_threshold:
+  0.25
+# nFeature lower quantile threshold
+Feature_lowerQuantile:
+  0.01
+# nFeature upper quantile threshold
+Feature_upperQuantile:
+  0.99
+# percentMT upper quantile threshold
+percentMT_upperQuantile:
+  0.85
