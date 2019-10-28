@@ -56,16 +56,24 @@ rule all:
        expand("samples/fastqc/{sample}_R2_val_2_fastqc.{fastqc_ext}", sample = SAMPLES, fastqc_ext=fastqc_ext),
        expand("samples/fastqscreen/{sample}/{sample}_R1_val_1_screen.{fastqscreen_ext}", sample=SAMPLES, fastqscreen_ext=fastqscreen_ext),
        expand("samples/fastqscreen/{sample}/{sample}_R2_val_2_screen.{fastqscreen_ext}", sample=SAMPLES, fastqscreen_ext=fastqscreen_ext),
+       expand("samples/hisat2/{sample}_output.bam", sample = SAMPLES),
+       "data/counts/raw_counts_.tsv",
+       "data/counts/raw_counts_.tsv.summary",       
        "data/counts/raw_counts_.filt.tsv",
-       "data/counts/raw_counts_.tsv.summary",
        "data/counts/sample_metadata.tsv",
-       "data/SeuratObject.rds",
-       "plots/SO_UMAP.png",
-       "plots/var_genes_scatter.png",
-       "plots/DE_heatmap.png",
-       "tables/DE_genes.tsv",
-       "tables/var_genes.tsv"
-        
+       "data/gene_metadata.tsv",
+       "plots/seurat/pre_QCviolin.png",
+       "plots/seurat/rna_libsize_barplot.pdf",
+       "plots/seurat/rna_features_barplot.pdf",
+       "plots/seurat/post_QCviolin.png",
+       "plots/seurat/post_elbowPlot.png",       
+       "plots/seurat/post_dimHeatPCA.png",
+       "plots/seurat/post_SO_UMAP.png",
+       "data/seurat/post_var_genes.tsv",
+       "plots/seurat/post_var_genes_scatter.png",
+       "data/seurat/post_DEgenes.tsv",
+       "plots/seurat/post_DEheatmap.png",
+       "data/seurat/SeuratObject.rds"
 
 include: "rules/align_rmdp.smk"
 include: "rules/analysis.smk"

@@ -36,5 +36,4 @@ dependencies:
   - xopen=0.7.0=py_0
   - xz=5.2.4=h14c3975_4
   - zlib=1.2.11=h7b6447c_3
-prefix: /home/users/doe/miniconda3/envs/trimG.yaml
 

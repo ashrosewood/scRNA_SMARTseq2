@@ -20,7 +20,6 @@ rule trimming:
     shell:
         """trim_galore --gzip --paired -o samples/trimmed/ --fastqc_args "--outdir samples/fastqc/" {input[0]} {input[1]}"""
 
-
 rule fastqscreen:
     input:
         "samples/trimmed/{sample}_R1_val_1.fq.gz",
@@ -39,7 +38,6 @@ rule fastqscreen:
     shell:
         """fastq_screen --aligner bowtie2 --conf {params.conf} --outdir samples/fastqscreen/{wildcards.sample} {input[0]} {input[1]}"""
 
-
 rule Hisat2:
     input:
         "samples/trimmed/{sample}_R1_val_1.fq.gz",
@@ -52,7 +50,6 @@ rule Hisat2:
     run:
         HiSat2=config["hisat2_tool"],
         pathToGenomeIndex = config["hisat2_index"]
-
         shell("""
                 {HiSat2} -q -x {pathToGenomeIndex} \
                 -1 {input[0]} -2 {input[1]} -p {threads} \
@@ -62,31 +59,26 @@ rule Hisat2:
                 rm samples/hisat2/{wildcards.sample}_output.sam
 		""")
 
-
 rule feature_count:
     input:
         expand("samples/hisat2/{sample}_output.bam", sample = SAMPLES)
     output:
         "data/counts/raw_counts_.tsv",
         "data/counts/raw_counts_.tsv.summary"
+    params:
+        anno=config["gtf_file"],	
     conda:
         "../envs/featureCounts.yaml"
     shell:
-        """featureCounts -t exon -g gene_id -a /home/groups/CEDAR/anno/gtf/hg19_ens87.chr.gtf -o {output[0]} {input}"""
-
-rule create_meta:
-    input:
-        "data/counts/raw_counts_.tsv"
-    output:
-        "data/counts/sample_metdata.tsv"
-    shell:
-        """Rscript""" ###ADD R SCRIPT TO CREATE FILE
+        """featureCounts -p -t exon -g gene_id -a {params.anno} -o {output[0]} {input}"""
 	
 rule filter_counts:
     input:
         countsFile="data/counts/raw_counts_.tsv"
     output:
-        "data/counts/raw_counts_.filt.tsv"
+        "data/counts/raw_counts_.filt.tsv",
+	"data/counts/sample_metadata.tsv",
+	"data/gene_metadata.tsv"	
     params:
         anno=config["filter_anno"],
         biotypes=config["biotypes"],
