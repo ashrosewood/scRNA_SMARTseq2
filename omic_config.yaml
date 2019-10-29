@@ -80,3 +80,6 @@ Feature_upperQuantile:
 # percentMT upper quantile threshold
 percentMT_upperQuantile:
   0.85
+# Deciding whether or not to integrate across samples
+integrateTF:
+  FALSE

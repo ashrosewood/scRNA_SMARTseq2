@@ -7,14 +7,22 @@ rule create_Seurat:
         "plots/seurat/rna_libsize_barplot.pdf",
         "plots/seurat/rna_features_barplot.pdf",
         "plots/seurat/post_QCviolin.png",
-        "plots/seurat/post_elbowPlot.png",       
+        "plots/seurat/post_elbowPlot.png",
+	"plots/seurat/post_elbowPlot_CCreduced.png",
         "plots/seurat/post_dimHeatPCA.png",
         "plots/seurat/post_SO_UMAP.png",
+	"plots/seurat/post_SO_UMAP_CCreduced.png",
+	"plots/seurat/CCPhase_UMAP.png",
+	"plots/seurat/CCPhase_UMAP_CCreduced.png",
         "data/seurat/post_var_genes.tsv",
         "plots/seurat/post_var_genes_scatter.png",
+	"plots/seurat/post_var_genes_scatter_CCreduced.png",
         "data/seurat/post_DEgenes.tsv",
+	"data/seurat/post_DEgenes_CCreduced.tsv",
         "plots/seurat/post_DEheatmap.png",
-        "data/seurat/SeuratObject.rds"
+	"plots/seurat/post_DEheatmap_CCreduced.png",
+        "data/seurat/SeuratObject.rds",
+        "data/seurat/SeuratObject_CCred.rds"
      params:
         coverage_threshold = config["coverage_threshold"],
         features_threshold = config["features_threshold"],
@@ -22,7 +30,8 @@ rule create_Seurat:
         MT_threshold = config["MT_threshold"],
         Feature_lowerQuantile = config["Feature_lowerQuantile"],
         Feature_upperQuantile = config["Feature_upperQuantile"],
-        percentMT_upperQuantile = config["percentMT_upperQuantile"]
+        percentMT_upperQuantile = config["percentMT_upperQuantile"],
+	integrateTF = config["integrateTF"]
      conda:
         "../envs/NMT_Create_Seurat.yaml"        	
      shell:
