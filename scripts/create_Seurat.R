@@ -21,6 +21,8 @@ Count_upperQuantile = snakemake@params[['Count_upperQuantile']]
 percentMT_upperQuantile = snakemake@params[['percentMT_upperQuantile']]
 #percentMT_upperQuantile <- .85
 
+integrateTF = snakemake@params[['integrateTF']]
+
 opts <- list()
 opts$coverage_threshold <- coverage_threshold
 
@@ -36,6 +38,7 @@ opts$Count_upperQuantile <- Count_upperQuantile
 
 opts$percentMT_upperQuantile <- percentMT_upperQuantile
 
+opts$integrate <- integrateTF
 
 ## I/O ##
 io <- list()
@@ -43,6 +46,7 @@ io$in.gene_metadata   <- "data/gene_metadata.tsv"
 io$in.sample_metadata <- "data/counts/sample_metadata.tsv"
 io$in.raw_counts      <- "data/counts/raw_counts_.filt.tsv"
 io$out.file           <- "data/seurat/SeuratObject.rds"
+io$out.file.CCred     <- "data/seurat/SeuratObject_CCred.rds"
 io$dataDir            <- "data/seurat"
 io$plotDir            <- "plots/seurat"
 
@@ -62,6 +66,7 @@ library(ggplot2)
 library(cowplot)
 library(png)
 library(dplyr)
+library(stringr)
 
 barplot_theme <- function() {
   p <- theme(
@@ -213,6 +218,21 @@ dev.off()
 SO        <- NormalizeData(SO)
 SO        <- FindVariableFeatures(object = SO, selection.method = "vst", nfeatures = 2000)
 
+### Integrating (if necessary) ###
+SO@meta.data$origin <- str_extract(rownames(SO@meta.data), "[^_]+")
+
+if (opts$integrate) {
+    SO.list <- SplitObject(SO, split.by = "origin")
+    for (i in 1:length(SO.list)) {
+        SO.list[[i]] <- NormalizeData(SO.list[[i]], verbose = FALSE)
+        SO.list[[i]] <- FindVariableFeatures(SO.list[[i]], selection.method = "vst", 
+                                             nfeatures = 2000, verbose = FALSE)
+    }
+    SO.anchors <- FindIntegrationAnchors(object.list = SO.list, dims = 1:30)
+    SO.integrated <- IntegrateData(anchorset = SO.anchors, dims = 1:30)
+    SO <- SO.integrated
+}
+
 ## cell cycle scoring
 cc_genes  <- read.table("data/regev_lab_cell_cycle_genes.txt")
 s.genes   <- cc_genes$V1[1:43]
@@ -222,9 +242,12 @@ g2m.genes <- cc_genes$V1[44:97]
 #g2m.genes.ens <- feature_metadata[feature_metadata$gene %in% g2m.genes,"ens_id"]
 
 
-SO        <- CellCycleScoring(SO, s.features = s.genes, g2m.features = g2m.genes)
-SO        <- ScaleData(object = SO, features = rownames(SO), vars.to.regress=c("S.Score","G2M.Score"))
+CC_SO        <- CellCycleScoring(SO, s.features = s.genes, g2m.features = g2m.genes)
+CC_SO        <- ScaleData(object = CC_SO, features = rownames(SO), vars.to.regress=c("S.Score","G2M.Score"))
 
+SO        <- ScaleData(object = SO, features = rownames(SO))
+
+CC_SO     <- RunPCA(CC_SO, approx = FALSE, verbose = FALSE)
 SO        <- RunPCA(SO, approx = FALSE, verbose = FALSE)
 
 # Examine and visualize PCA results a few different ways
@@ -237,6 +260,20 @@ if(dim(SO$pca)[2] >=6){
 }else{
     png(sub("$", "/post_dimHeatPCA.png", io$plotDir))
     DimHeatmap(object = SO
+             , dims = 1:dim(SO$pca)[2], cells = 500, balanced = TRUE)
+    dev.off()
+}
+
+# Same as above but for cell cycle
+
+if(dim(CC_SO$pca)[2] >=6){
+    png(sub("$", "/post_dimHeatPCA_CCreduced.png", io$plotDir))
+    DimHeatmap(object = CC_SO
+             , dims = 1:6, cells = 500, balanced = TRUE)
+    dev.off()
+}else{
+    png(sub("$", "/post_dimHeatPCA_CCreduced.png", io$plotDir))
+    DimHeatmap(object = CC_SO
              , dims = 1:dim(SO$pca)[2], cells = 500, balanced = TRUE)
     dev.off()
 }
@@ -254,9 +291,44 @@ png(sub("$", "/post_SO_UMAP.png", io$plotDir))
 DimPlot(SO, reduction = "umap", group.by = "seurat_clusters")
 dev.off()
 
+png(sub("$", "/CCPhase_UMAP.png", io$plotDir))
+DimPlot(SO, reduction = "umap", group.by = "Phase")
+dev.off()
+
 var_genes <- VariableFeatures(SO)
 write.table(var_genes, file = "data/seurat/post_var_genes.tsv", sep = "\t", row.names=F, col.names=F, quote=F)
 
+if (opts$integrate) {
+    png(sub("$", "/origin_UMAP.png", io$plotDir))
+    DimPlot(SO, reduction = "umap", group.by = "origin")
+    dev.off()
+}
+    
+## Same as above but for cell cycle
+png(sub("$", "/post_elbowPlot_CCreduced.png", io$plotDir))
+ElbowPlot(object = CC_SO, ndims = 60)
+dev.off()
+
+CC_SO        <- FindNeighbors(CC_SO, reduction = "pca", dims = 1:40)
+CC_SO        <- FindClusters(object = CC_SO, resolution = 1.0)
+CC_SO        <- RunUMAP(CC_SO, reduction = "pca", dims = 1:40)
+
+png(sub("$", "/post_SO_UMAP_CCreduced.png", io$plotDir))
+DimPlot(CC_SO, reduction = "umap", group.by = "seurat_clusters")
+dev.off()
+
+png(sub("$", "/CCPhase_UMAP_CCreduced.png", io$plotDir))
+DimPlot(CC_SO, reduction = "umap", group.by = "Phase")
+dev.off()
+
+var_genes <- VariableFeatures(CC_SO)
+write.table(var_genes, file = "data/seurat/post_var_genes_CCreduced.tsv", sep = "\t", row.names=F, col.names=F, quote=F)
+
+if (opts$integrate) {
+    png(sub("$", "/origin_UMAP_CCreduced.png", io$plotDir))
+    DimPlot(CC_SO, reduction = "umap", group.by = "origin")
+    dev.off()
+}
 ## Plot Variable Genes ##
 
 top10 <- head(VariableFeatures(SO))
@@ -264,6 +336,16 @@ plot1 <- VariableFeaturePlot(SO)
 plot2 <- LabelPoints(plot=plot1, points=top10, repel = TRUE)
 
 png(sub("$", "/post_var_genes_scatter.png", io$plotDir))
+plot2
+dev.off()
+
+## Plot Variable Genes for CC reduced ##
+
+top10 <- head(VariableFeatures(CC_SO))
+plot1 <- VariableFeaturePlot(CC_SO)
+plot2 <- LabelPoints(plot=plot1, points=top10, repel = TRUE)
+
+png(sub("$", "/post_var_genes_scatter_CCreduced.png", io$plotDir))
 plot2
 dev.off()
 
@@ -277,5 +359,18 @@ png(sub("$", "/post_DEheatmap.png", io$plotDir))
 DoHeatmap(SO, features = top10$gene) + NoLegend()
 dev.off()
 
+## Find DE genes for CC reduced ##
+
+CC_SO.markers <- FindAllMarkers(CC_SO, logfc.threshold = 0.2)
+top10      <- CC_SO.markers %>% group_by(cluster) %>% top_n(n = 10, wt = avg_logFC)
+write.table(CC_SO.markers, file = "data/seurat/post_DEgenes_CCreduced.tsv", sep = "\t", row.names=F, quote=F)
+
+png(sub("$", "/post_DEheatmap_CCreduced.png", io$plotDir))
+DoHeatmap(CC_SO, features = top10$gene) + NoLegend()
+dev.off()
+
 ## Save Seurat Object ##
 saveRDS(SO, io$out.file)
+
+## Save CC reduced Seurat Object ##
+saveRDS(CC_SO, io$out.file.CCred)
