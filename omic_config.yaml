@@ -83,3 +83,6 @@ percentMT_upperQuantile:
 # Deciding whether or not to integrate across samples
 integrateTF:
   FALSE
+# nCount upper quantile threshold
+Count_upperQuantile:
+  0.99
