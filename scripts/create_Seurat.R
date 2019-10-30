@@ -1,42 +1,81 @@
-coverage_threshold = snakemake@params[['coverage_threshold']]
+args <- commandArgs()
+
+help <- function(){
+    cat("accessibility_profiles.R :
+Make profiles plots around promoters. Output will be save in the parsed directory in the covPath. The promter and body regions (gene body w#ithout promoter) will be saved in the outDir.\n")
+    cat("Usage: \n")
+    cat("--covThresh   : Minimum library size                                        [required]\n")
+    cat("--featThresh  : Minimum number of expressed features                        [required]\n")
+    cat("--top50       : Maximum fraction of reads accounting for top 50 features    [required]\n")
+    cat("--featureLQ   : Feature lower quantile                                      [required]\n")
+    cat("--featureUQ   : Feature upper quantile                                      [required]\n")
+    cat("--CountUQ     : Count upper quantile                                        [required]\n")
+    cat("--MTUQ        : percent MT upper quantile                                   [required]\n")
+    cat("--integrate   : TRUE or FALSE determining whether to integrate              [required]\n")
+    cat("\n")
+    q()
+}
+
+io   <- list()
+opts <- list()
+
+# Save values of each argument
+if( !is.na(charmatch("--help",args)) || !is.na(charmatch("--help",args)) ){
+    help()
+} else {
+    coverage_threshold      <- sub( '--covThresh=', '', args[grep('--covThresh=', args)] )
+    features_threshold      <- sub( '--featThresh=', '', args[grep('--featThresh=', args)] )
+    top50_threshold         <- sub( '--top50=', '', args[grep('--top50=', args)] )
+    Feature_lowerQuantile   <- sub( '--featureLQ=', '', args[grep('--featureLQ=', args)])
+    Feature_upperQuantile   <- sub( '--featureUQ=', '', args[grep('--featureUQ=', args)])
+    Count_upperQuantile     <- sub( '--CountUQ=', '', args[grep('--CountUQ=', args)])
+    percentMT_upperQuantile <- sub( '--MTUQ=', '',args[grep('--MTUQ=',args)])
+    integrateTF             <- sub( '--integrate=', '',args[grep('--integrate=',args)])
+
+}
+
+
+
+
+##coverage_threshold = snakemake@params[['coverage_threshold']]
 
 #setwd("../")
 #coverage_threshold <- 2e5    # Minimum library size (coverage)
 
-features_threshold = snakemake@params[['features_threshold']]
+#features_threshold = snakemake@params[['features_threshold']]
 #features_threshold <- 1000   # Minimum number of expressed features
 
-top50_threshold = snakemake@params[['top50_threshold']]
+#top50_threshold = snakemake@params[['top50_threshold']]
 #top50_threshold <- 0.75      # Maximum fraction of reads accounting for the top 50 features
 
-Feature_lowerQuantile = snakemake@params[['Feature_lowerQuantile']]
+#Feature_lowerQuantile = snakemake@params[['Feature_lowerQuantile']]
 #Feature_lowerQuantile <- .01
 
-Feature_upperQuantile = snakemake@params[['Feature_upperQuantile']]
+#Feature_upperQuantile = snakemake@params[['Feature_upperQuantile']]
 #Feature_upperQuantile <- .99
 
-Count_upperQuantile = snakemake@params[['Count_upperQuantile']]
+#Count_upperQuantile = snakemake@params[['Count_upperQuantile']]
 #Count_upperQuantile <- .99
 
-percentMT_upperQuantile = snakemake@params[['percentMT_upperQuantile']]
+#percentMT_upperQuantile = snakemake@params[['percentMT_upperQuantile']]
 #percentMT_upperQuantile <- .85
 
-integrateTF = snakemake@params[['integrateTF']]
+#integrateTF = snakemake@params[['integrateTF']]
 
 opts <- list()
-opts$coverage_threshold <- coverage_threshold
+opts$coverage_threshold <- as.numeric(coverage_threshold)
 
-opts$features_threshold <- features_threshold
+opts$features_threshold <- as.numeric(features_threshold)
 
-opts$top50_threshold <- top50_threshold
+opts$top50_threshold <- as.numeric(top50_threshold)
 
-opts$Feature_lowerQuantile <- Feature_lowerQuantile
+opts$Feature_lowerQuantile <- as.numeric(Feature_lowerQuantile)
 
-opts$Feature_upperQuantile <- Feature_upperQuantile
+opts$Feature_upperQuantile <- as.numeric(Feature_upperQuantile)
 
-opts$Count_upperQuantile <- Count_upperQuantile
+opts$Count_upperQuantile <- as.numeric(Count_upperQuantile)
 
-opts$percentMT_upperQuantile <- percentMT_upperQuantile
+opts$percentMT_upperQuantile <- as.numeric(percentMT_upperQuantile)
 
 opts$integrate <- integrateTF
 
@@ -242,8 +281,8 @@ g2m.genes <- cc_genes$V1[44:97]
 #g2m.genes.ens <- feature_metadata[feature_metadata$gene %in% g2m.genes,"ens_id"]
 
 
-CC_SO        <- CellCycleScoring(SO, s.features = s.genes, g2m.features = g2m.genes)
-CC_SO        <- ScaleData(object = CC_SO, features = rownames(SO), vars.to.regress=c("S.Score","G2M.Score"))
+SO        <- CellCycleScoring(SO, s.features = s.genes, g2m.features = g2m.genes)
+CC_SO        <- ScaleData(object = SO, features = rownames(SO), vars.to.regress=c("S.Score","G2M.Score"))
 
 SO        <- ScaleData(object = SO, features = rownames(SO))
 

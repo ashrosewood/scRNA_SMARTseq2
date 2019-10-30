@@ -27,7 +27,7 @@ rule create_Seurat:
         coverage_threshold = config["coverage_threshold"],
         features_threshold = config["features_threshold"],
         top50_threshold = config["top50_threshold"],
-        MT_threshold = config["MT_threshold"],
+        Count_upperQuantile = config["Count_upperQuantile"],
         Feature_lowerQuantile = config["Feature_lowerQuantile"],
         Feature_upperQuantile = config["Feature_upperQuantile"],
         percentMT_upperQuantile = config["percentMT_upperQuantile"],
@@ -35,4 +35,4 @@ rule create_Seurat:
      conda:
         "../envs/NMT_Create_Seurat.yaml"        	
      shell:
-        "Rscript scripts/create_Seurat.R"
+        "Rscript scripts/create_Seurat.R --covThresh={params.coverage_threshold} --featThresh={params.features_threshold} --top50={params.top50_threshold} --featureLQ={params.Feature_lowerQuantile} --featureUQ={params.Feature_upperQuantile} --CountUQ={params.Count_upperQuantile} --MTUQ={params.percentMT_upperQuantile} --integrate={params.integrateTF}"
