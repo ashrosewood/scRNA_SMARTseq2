@@ -73,16 +73,18 @@ MT_threshold:
   0.25
 # nFeature lower quantile threshold
 Feature_lowerQuantile:
-  0.01
+  0.001
 # nFeature upper quantile threshold
 Feature_upperQuantile:
-  0.99
+  0.999
 # percentMT upper quantile threshold
 percentMT_upperQuantile:
   0.85
 # Deciding whether or not to integrate across samples
 integrateTF:
-  FALSE
+  TRUE
 # nCount upper quantile threshold
 Count_upperQuantile:
-  0.99
+  0.999
+clusterRes:
+  1.0

@@ -63,8 +63,6 @@ rule all:
        "data/counts/sample_metadata.tsv",
        "data/gene_metadata.tsv",
        "plots/seurat/pre_QCviolin.png",
-       "plots/seurat/rna_libsize_barplot.pdf",
-       "plots/seurat/rna_features_barplot.pdf",
        "plots/seurat/post_QCviolin.png",
        "plots/seurat/post_elbowPlot.png",       
        "plots/seurat/post_dimHeatPCA.png",
