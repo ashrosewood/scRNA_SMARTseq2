@@ -12,6 +12,7 @@ Make profiles plots around promoters. Output will be save in the parsed director
     cat("--CountUQ     : Count upper quantile                                        [required]\n")
     cat("--MTUQ        : percent MT upper quantile                                   [required]\n")
     cat("--integrate   : TRUE or FALSE determining whether to integrate              [required]\n")
+    cat("--res         : resolution for clustering                                   [required]\n")
     cat("\n")
     q()
 }
@@ -31,6 +32,7 @@ if( !is.na(charmatch("--help",args)) || !is.na(charmatch("--help",args)) ){
     Count_upperQuantile     <- sub( '--CountUQ=', '', args[grep('--CountUQ=', args)])
     percentMT_upperQuantile <- sub( '--MTUQ=', '',args[grep('--MTUQ=',args)])
     integrateTF             <- sub( '--integrate=', '',args[grep('--integrate=',args)])
+    res                     <- sub( '--res=', '', args[grep('--res=',args)])
 
 }
 
@@ -40,7 +42,7 @@ if( !is.na(charmatch("--help",args)) || !is.na(charmatch("--help",args)) ){
 ##coverage_threshold = snakemake@params[['coverage_threshold']]
 
 #setwd("../")
-#coverage_threshold <- 2e5    # Minimum library size (coverage)
+#coverage_threshold <- 1e5    # Minimum library size (coverage)
 
 #features_threshold = snakemake@params[['features_threshold']]
 #features_threshold <- 1000   # Minimum number of expressed features
@@ -61,6 +63,9 @@ if( !is.na(charmatch("--help",args)) || !is.na(charmatch("--help",args)) ){
 #percentMT_upperQuantile <- .85
 
 #integrateTF = snakemake@params[['integrateTF']]
+#integrateTF = TRUE
+
+#res = 1.0
 
 opts <- list()
 opts$coverage_threshold <- as.numeric(coverage_threshold)
@@ -78,6 +83,8 @@ opts$Count_upperQuantile <- as.numeric(Count_upperQuantile)
 opts$percentMT_upperQuantile <- as.numeric(percentMT_upperQuantile)
 
 opts$integrate <- integrateTF
+
+opts$res <- as.numeric(res)
 
 ## I/O ##
 io <- list()
@@ -157,84 +164,189 @@ SO <- CreateSeuratObject(counts = counts, min.cells = 0,
 ## save unique gene ids  
 feature_metadata$gene_unique <- rownames(SO)
 
-## Calculate quality metrics ##
-#mt <- feature_metadata[grep("^MT-", feature_metadata$gene), "ens_id"]
+ctr <- 0
+SO@meta.data$origin <- str_extract(rownames(SO@meta.data), "[^_]+")
 
-## Calculate quality metrics ##
 SO[["percent.mt"]] <- PercentageFeatureSet(object = SO, pattern = "^MT-")
 #SO[["percent.mt"]] <- PercentageFeatureSet(object = SO, features = mt)
 
-png(sub("$", "/pre_QCviolin.png", io$plotDir))
+png(paste0(io$plotDir, "/pre_QCviolin.png"))
 VlnPlot(object=SO, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
 dev.off()
+
+filtSO.list <- list()
+
+if (opts$integrate) {
+    SO.list <- SplitObject(SO, split.by = "origin")
+    for (subSO in SO.list) {
+        ctr <- ctr + 1
 
 ############################
 ## Filter by library size ##
 ############################
-libsize.drop <- SO$nCount_RNA < opts$coverage_threshold
-sum(libsize.drop)
+        libsize.drop <- subSO$nCount_RNA < opts$coverage_threshold
+        sum(libsize.drop)
 
-SO$sample <- rownames(SO[[]])
+        subSO$sample <- rownames(subSO[[]])
 
-libsize.drop_dt <- data.table(
-  sample=SO$sample, 
-  size=SO$nCount_RNA, 
-  color=c("black","red")[as.numeric(libsize.drop)+1]
-) %>% setkey(size) %>% .[,col:=size] %>% .[,sample:=factor(sample,levels=sample)]
+        libsize.drop_dt <- data.table(
+            sample=subSO$sample, 
+            size=subSO$nCount_RNA, 
+            color=c("black","red")[as.numeric(libsize.drop)+1]
+        ) %>% setkey(size) %>% .[,col:=size] %>% .[,sample:=factor(sample,levels=sample)]
 
-p1 <- ggplot(libsize.drop_dt, aes(x=sample, y=size)) +
-  geom_bar(stat='identity', position="dodge", fill="#3CB54E") +
-  geom_hline(yintercept=opts$coverage_threshold, colour="black", linetype="dashed") +
-  scale_fill_gradient(low="red", high="green") +
-  labs(y="Library size") +
-  #barplot_theme() +
-  xlab(paste("Threshold", opts$coverage_threshold))+
-  theme(
-    legend.position = "none",
-    axis.title.x = element_text(size=rel(1.8)),
-    axis.title.y = element_text(size=rel(1.8)),
-    # axis.text.x = element_text(colour="black", color=foo$color, angle=90, size=10, vjust=0.5, hjust=1.0)
-    axis.text.x = element_blank(),
-    axis.ticks.x = element_blank()
-  )
-print(p1)
-save_plot(sub("$", "/rna_libsize_barplot.pdf", io$plotDir), p1)
+        p1 <- ggplot(libsize.drop_dt, aes(x=sample, y=size)) +
+            geom_bar(stat='identity', position="dodge", fill="#3CB54E") +
+            geom_hline(yintercept=opts$coverage_threshold, colour="black", linetype="dashed") +
+            scale_fill_gradient(low="red", high="green") +
+            labs(y="Library size") +
+                                        #barplot_theme() +
+            xlab(paste("Threshold", opts$coverage_threshold))+
+            theme(
+                legend.position = "none",
+                axis.title.x = element_text(size=rel(1.8)),
+                axis.title.y = element_text(size=rel(1.8)),
+                                        # axis.text.x = element_text(colour="black", color=foo$color, angle=90, size=10, vjust=0.5, hjust=1.0)
+                axis.text.x = element_blank(),
+                axis.ticks.x = element_blank()
+            )
+        print(p1)
+        save_plot(paste0(io$plotDir, "/rna_libsize_barplot", as.character(ctr), ".pdf"), p1)
 
 ######################################
 ## Filter by number of expressed genes
 ######################################
-feature.drop <- SO$nFeature_RNA < opts$features_threshold
-sum(feature.drop)
+        feature.drop <- subSO$nFeature_RNA < opts$features_threshold
+        sum(feature.drop)
 
-feature.drop_dt <- data.table(
-  sample=SO$sample,
-  features = SO$nFeature_RNA, 
-  color = c("black","red")[as.numeric(feature.drop)+1]
-) %>% setkey(features) %>% .[,col:=features] %>% .[,sample:=factor(sample,levels=sample)]
+        feature.drop_dt <- data.table(
+            sample=subSO$sample,
+            features = subSO$nFeature_RNA, 
+            color = c("black","red")[as.numeric(feature.drop)+1]
+        ) %>% setkey(features) %>% .[,col:=features] %>% .[,sample:=factor(sample,levels=sample)]
 
-p2 <- ggplot(feature.drop_dt, aes(x=sample, y=features)) +
-  geom_bar(stat='identity', position="dodge", fill="#3CB54E") +
-  geom_hline(yintercept=opts$features_threshold, colour="black", linetype="dashed") +
-  # scale_fill_gradient(low="red", high="green") +
-  labs(y="Expressed genes") +
-  #barplot_theme() +
-  xlab(paste("Threshold", opts$coverage_threshold))+
-  theme(
-    legend.position = "none",
-    axis.title.x = element_text(size=rel(1.8)),
-    axis.title.y = element_text(size=rel(1.8)),
-    # axis.text.x = element_text(colour="black", color=foo$color, angle=90, size=10, vjust=0.5, hjust=1.0)
-    axis.text.x = element_blank(),
-    axis.ticks.x = element_blank()
-  )
-print(p2)
-save_plot(sub("$", "/rna_features_barplot.pdf", io$plotDir), p2)
+        p2 <- ggplot(feature.drop_dt, aes(x=sample, y=features)) +
+            geom_bar(stat='identity', position="dodge", fill="#3CB54E") +
+            geom_hline(yintercept=opts$features_threshold, colour="black", linetype="dashed") +
+                                        # scale_fill_gradient(low="red", high="green") +
+            labs(y="Expressed genes") +
+                                        #barplot_theme() +
+            xlab(paste("Threshold", opts$coverage_threshold))+
+            theme(
+                legend.position = "none",
+                axis.title.x = element_text(size=rel(1.8)),
+                axis.title.y = element_text(size=rel(1.8)),
+                                        # axis.text.x = element_text(colour="black", color=foo$color, angle=90, size=10, vjust=0.5, hjust=1.0)
+                axis.text.x = element_blank(),
+                axis.ticks.x = element_blank()
+            )
+        print(p2)
+        save_plot(paste0(io$plotDir, "/rna_features_barplot", as.character(ctr), ".pdf"), p2)
 
 #########
 ## Subset
 #########
 
-SO <- subset(x = SO,
+        subSO <- subset(x = subSO,
+             subset = nFeature_RNA >= quantile(subSO$nFeature_RNA,
+                                               opts$Feature_lowerQuantile)
+             & nFeature_RNA <= quantile(subSO$nFeature_RNA, opts$Feature_upperQuantile)
+             & nCount_RNA <= quantile(subSO$nCount_RNA, opts$Count_upperQuantile)
+             & nCount_RNA >= opts$coverage_threshold
+             & percent.mt <= quantile(subSO$percent.mt, opts$percentMT_upperQuantile))
+
+
+
+#SO <- subset(x = SO, subset = nFeature_RNA >= quantile(SO$nFeature_RNA, opts$Feature_lowerQuantile) & nFeature_RNA <= quantile(SO$nFeature_RNA, opts$Feature_upperQuantile) & nCount_RNA <= quantile(SO$nCount_RNA, opts$Count_upperQuantile) & nCount_RNA >= opts$coverage_threshold & percent.mt <= quantile(SO$percent.mt, opts$percentMT_upperQuantile))
+
+
+##############################
+## Normalize and Scale Data ##
+##############################
+## need to add anchoring approach when we have multiple samples
+        subSO        <- NormalizeData(subSO)
+        subSO        <- FindVariableFeatures(object = subSO, selection.method = "vst", nfeatures = 2000)
+        filtSO.list <- c(filtSO.list, subSO)
+    }
+
+} else {    
+    ## Calculate quality metrics ##
+    #mt <- feature_metadata[grep("^MT-", feature_metadata$gene), "ens_id"]
+    ## Calculate quality metrics ##
+    SO[["percent.mt"]] <- PercentageFeatureSet(object = SO, pattern = "^MT-")
+    #SO[["percent.mt"]] <- PercentageFeatureSet(object = SO, features = mt)
+
+    png(sub("$", "/pre_QCviolin.png", io$plotDir))
+    VlnPlot(object=SO, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+    dev.off()
+
+############################
+## Filter by library size ##
+############################
+    libsize.drop <- SO$nCount_RNA < opts$coverage_threshold
+    sum(libsize.drop)
+
+    SO$sample <- rownames(SO[[]])
+
+    libsize.drop_dt <- data.table(
+        sample=SO$sample, 
+        size=SO$nCount_RNA, 
+        color=c("black","red")[as.numeric(libsize.drop)+1]
+    ) %>% setkey(size) %>% .[,col:=size] %>% .[,sample:=factor(sample,levels=sample)]
+
+    p1 <- ggplot(libsize.drop_dt, aes(x=sample, y=size)) +
+        geom_bar(stat='identity', position="dodge", fill="#3CB54E") +
+        geom_hline(yintercept=opts$coverage_threshold, colour="black", linetype="dashed") +
+        scale_fill_gradient(low="red", high="green") +
+        labs(y="Library size") +
+                                        #barplot_theme() +
+        xlab(paste("Threshold", opts$coverage_threshold))+
+        theme(
+            legend.position = "none",
+            axis.title.x = element_text(size=rel(1.8)),
+            axis.title.y = element_text(size=rel(1.8)),
+                                        # axis.text.x = element_text(colour="black", color=foo$color, angle=90, size=10, vjust=0.5, hjust=1.0)
+            axis.text.x = element_blank(),
+            axis.ticks.x = element_blank()
+        )
+    print(p1)
+    save_plot(sub("$", "/rna_libsize_barplot.pdf", io$plotDir), p1)
+
+######################################
+## Filter by number of expressed genes
+######################################
+    feature.drop <- SO$nFeature_RNA < opts$features_threshold
+    sum(feature.drop)
+
+    feature.drop_dt <- data.table(
+        sample=SO$sample,
+        features = SO$nFeature_RNA, 
+        color = c("black","red")[as.numeric(feature.drop)+1]
+    ) %>% setkey(features) %>% .[,col:=features] %>% .[,sample:=factor(sample,levels=sample)]
+
+    p2 <- ggplot(feature.drop_dt, aes(x=sample, y=features)) +
+        geom_bar(stat='identity', position="dodge", fill="#3CB54E") +
+        geom_hline(yintercept=opts$features_threshold, colour="black", linetype="dashed") +
+                                        # scale_fill_gradient(low="red", high="green") +
+        labs(y="Expressed genes") +
+                                        #barplot_theme() +
+        xlab(paste("Threshold", opts$coverage_threshold))+
+        theme(
+            legend.position = "none",
+            axis.title.x = element_text(size=rel(1.8)),
+            axis.title.y = element_text(size=rel(1.8)),
+                                        # axis.text.x = element_text(colour="black", color=foo$color, angle=90, size=10, vjust=0.5, hjust=1.0)
+            axis.text.x = element_blank(),
+            axis.ticks.x = element_blank()
+        )
+    print(p2)
+    save_plot(sub("$", "/rna_features_barplot.pdf", io$plotDir), p2)
+
+#########
+## Subset
+#########
+
+    SO <- subset(x = SO,
              subset = nFeature_RNA >= quantile(SO$nFeature_RNA,
                                                opts$Feature_lowerQuantile)
              & nFeature_RNA <= quantile(SO$nFeature_RNA, opts$Feature_upperQuantile)
@@ -246,31 +358,34 @@ SO <- subset(x = SO,
 
 #SO <- subset(x = SO, subset = nFeature_RNA >= quantile(SO$nFeature_RNA, opts$Feature_lowerQuantile) & nFeature_RNA <= quantile(SO$nFeature_RNA, opts$Feature_upperQuantile) & nCount_RNA <= quantile(SO$nCount_RNA, opts$Count_upperQuantile) & nCount_RNA >= opts$coverage_threshold & percent.mt <= quantile(SO$percent.mt, opts$percentMT_upperQuantile))
 
-png(sub("$", "/post_QCviolin.png", io$plotDir))
-VlnPlot(object=SO, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
-dev.off()
+    png(sub("$", "/post_QCviolin.png", io$plotDir))
+    VlnPlot(object=SO, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+    dev.off()
 
 ##############################
 ## Normalize and Scale Data ##
 ##############################
 ## need to add anchoring approach when we have multiple samples
-SO        <- NormalizeData(SO)
-SO        <- FindVariableFeatures(object = SO, selection.method = "vst", nfeatures = 2000)
+    SO        <- NormalizeData(SO)
+    SO        <- FindVariableFeatures(object = SO, selection.method = "vst", nfeatures = 2000)
+}
 
 ### Integrating (if necessary) ###
-SO@meta.data$origin <- str_extract(rownames(SO@meta.data), "[^_]+")
 
 if (opts$integrate) {
-    SO.list <- SplitObject(SO, split.by = "origin")
-    for (i in 1:length(SO.list)) {
-        SO.list[[i]] <- NormalizeData(SO.list[[i]], verbose = FALSE)
-        SO.list[[i]] <- FindVariableFeatures(SO.list[[i]], selection.method = "vst", 
+    for (i in 1:length(filtSO.list)) {
+        filtSO.list[[i]] <- NormalizeData(filtSO.list[[i]], verbose = FALSE)
+        filtSO.list[[i]] <- FindVariableFeatures(filtSO.list[[i]], selection.method = "vst", 
                                              nfeatures = 2000, verbose = FALSE)
     }
-    SO.anchors <- FindIntegrationAnchors(object.list = SO.list, dims = 1:30)
+    SO.anchors <- FindIntegrationAnchors(object.list = filtSO.list, dims = 1:30, k.filter=50)
     SO.integrated <- IntegrateData(anchorset = SO.anchors, dims = 1:30)
     SO <- SO.integrated
 }
+
+png(paste0(io$plotDir, "/post_QCviolin.png"))
+VlnPlot(object=SO, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+dev.off()
 
 ## cell cycle scoring
 cc_genes  <- read.table("data/regev_lab_cell_cycle_genes.txt")
@@ -323,7 +438,7 @@ ElbowPlot(object = SO, ndims = 60)
 dev.off()
 
 SO        <- FindNeighbors(SO, reduction = "pca", dims = 1:40)
-SO        <- FindClusters(object = SO, resolution = 1.0)
+SO        <- FindClusters(object = SO, resolution = opts$res)
 SO        <- RunUMAP(SO, reduction = "pca", dims = 1:40)
 
 png(sub("$", "/post_SO_UMAP.png", io$plotDir))
@@ -334,14 +449,14 @@ png(sub("$", "/CCPhase_UMAP.png", io$plotDir))
 DimPlot(SO, reduction = "umap", group.by = "Phase")
 dev.off()
 
+SO <- FindVariableFeatures(SO)
 var_genes <- VariableFeatures(SO)
 write.table(var_genes, file = "data/seurat/post_var_genes.tsv", sep = "\t", row.names=F, col.names=F, quote=F)
 
-if (opts$integrate) {
-    png(sub("$", "/origin_UMAP.png", io$plotDir))
-    DimPlot(SO, reduction = "umap", group.by = "origin")
-    dev.off()
-}
+png(sub("$", "/origin_UMAP.png", io$plotDir))
+DimPlot(SO, reduction = "umap", group.by = "origin")
+dev.off()
+
     
 ## Same as above but for cell cycle
 png(sub("$", "/post_elbowPlot_CCreduced.png", io$plotDir))
@@ -349,7 +464,7 @@ ElbowPlot(object = CC_SO, ndims = 60)
 dev.off()
 
 CC_SO        <- FindNeighbors(CC_SO, reduction = "pca", dims = 1:40)
-CC_SO        <- FindClusters(object = CC_SO, resolution = 1.0)
+CC_SO        <- FindClusters(object = CC_SO, resolution = opts$res)
 CC_SO        <- RunUMAP(CC_SO, reduction = "pca", dims = 1:40)
 
 png(sub("$", "/post_SO_UMAP_CCreduced.png", io$plotDir))
@@ -360,14 +475,14 @@ png(sub("$", "/CCPhase_UMAP_CCreduced.png", io$plotDir))
 DimPlot(CC_SO, reduction = "umap", group.by = "Phase")
 dev.off()
 
+CC_SO <- FindVariableFeatures(CC_SO)
 var_genes <- VariableFeatures(CC_SO)
 write.table(var_genes, file = "data/seurat/post_var_genes_CCreduced.tsv", sep = "\t", row.names=F, col.names=F, quote=F)
 
-if (opts$integrate) {
-    png(sub("$", "/origin_UMAP_CCreduced.png", io$plotDir))
-    DimPlot(CC_SO, reduction = "umap", group.by = "origin")
-    dev.off()
-}
+png(sub("$", "/origin_UMAP_CCreduced.png", io$plotDir))
+DimPlot(CC_SO, reduction = "umap", group.by = "origin")
+dev.off()
+
 ## Plot Variable Genes ##
 
 top10 <- head(VariableFeatures(SO))
