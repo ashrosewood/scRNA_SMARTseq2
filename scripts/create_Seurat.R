@@ -42,7 +42,7 @@ if( !is.na(charmatch("--help",args)) || !is.na(charmatch("--help",args)) ){
 ##coverage_threshold = snakemake@params[['coverage_threshold']]
 
 #setwd("../")
-#coverage_threshold <- 2e5    # Minimum library size (coverage)
+#coverage_threshold <- 1e5    # Minimum library size (coverage)
 
 #features_threshold = snakemake@params[['features_threshold']]
 #features_threshold <- 1000   # Minimum number of expressed features
@@ -63,6 +63,9 @@ if( !is.na(charmatch("--help",args)) || !is.na(charmatch("--help",args)) ){
 #percentMT_upperQuantile <- .85
 
 #integrateTF = snakemake@params[['integrateTF']]
+#integrateTF = TRUE
+
+#res = 1.0
 
 opts <- list()
 opts$coverage_threshold <- as.numeric(coverage_threshold)
@@ -171,6 +174,8 @@ png(paste0(io$plotDir, "/pre_QCviolin.png"))
 VlnPlot(object=SO, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
 dev.off()
 
+filtSO.list <- list()
+
 if (opts$integrate) {
     SO.list <- SplitObject(SO, split.by = "origin")
     for (subSO in SO.list) {
@@ -261,6 +266,7 @@ if (opts$integrate) {
 ## need to add anchoring approach when we have multiple samples
         subSO        <- NormalizeData(subSO)
         subSO        <- FindVariableFeatures(object = subSO, selection.method = "vst", nfeatures = 2000)
+        filtSO.list <- c(filtSO.list, subSO)
     }
 
 } else {    
@@ -363,22 +369,23 @@ if (opts$integrate) {
     SO        <- NormalizeData(SO)
     SO        <- FindVariableFeatures(object = SO, selection.method = "vst", nfeatures = 2000)
 }
+
 ### Integrating (if necessary) ###
+
+if (opts$integrate) {
+    for (i in 1:length(filtSO.list)) {
+        filtSO.list[[i]] <- NormalizeData(filtSO.list[[i]], verbose = FALSE)
+        filtSO.list[[i]] <- FindVariableFeatures(filtSO.list[[i]], selection.method = "vst", 
+                                             nfeatures = 2000, verbose = FALSE)
+    }
+    SO.anchors <- FindIntegrationAnchors(object.list = filtSO.list, dims = 1:30, k.filter=50)
+    SO.integrated <- IntegrateData(anchorset = SO.anchors, dims = 1:30)
+    SO <- SO.integrated
+}
 
 png(paste0(io$plotDir, "/post_QCviolin.png"))
 VlnPlot(object=SO, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
 dev.off()
-
-if (opts$integrate) {
-    for (i in 1:length(SO.list)) {
-        SO.list[[i]] <- NormalizeData(SO.list[[i]], verbose = FALSE)
-        SO.list[[i]] <- FindVariableFeatures(SO.list[[i]], selection.method = "vst", 
-                                             nfeatures = 2000, verbose = FALSE)
-    }
-    SO.anchors <- FindIntegrationAnchors(object.list = SO.list, dims = 1:30, k.filter=50)
-    SO.integrated <- IntegrateData(anchorset = SO.anchors, dims = 1:30)
-    SO <- SO.integrated
-}
 
 ## cell cycle scoring
 cc_genes  <- read.table("data/regev_lab_cell_cycle_genes.txt")
