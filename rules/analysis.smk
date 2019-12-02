@@ -4,8 +4,6 @@ rule create_Seurat:
         "data/counts/raw_counts_.filt.tsv"
      output:
         "plots/seurat/pre_QCviolin.png",
-        "plots/seurat/rna_libsize_barplot.pdf",
-        "plots/seurat/rna_features_barplot.pdf",
         "plots/seurat/post_QCviolin.png",
         "plots/seurat/post_elbowPlot.png",
 	"plots/seurat/post_elbowPlot_CCreduced.png",
@@ -31,8 +29,9 @@ rule create_Seurat:
         Feature_lowerQuantile = config["Feature_lowerQuantile"],
         Feature_upperQuantile = config["Feature_upperQuantile"],
         percentMT_upperQuantile = config["percentMT_upperQuantile"],
-	integrateTF = config["integrateTF"]
+	integrateTF = config["integrateTF"],
+	clusterRes = config["clusterRes"]
      conda:
         "../envs/NMT_Create_Seurat.yaml"        	
      shell:
-        "Rscript scripts/create_Seurat.R --covThresh={params.coverage_threshold} --featThresh={params.features_threshold} --top50={params.top50_threshold} --featureLQ={params.Feature_lowerQuantile} --featureUQ={params.Feature_upperQuantile} --CountUQ={params.Count_upperQuantile} --MTUQ={params.percentMT_upperQuantile} --integrate={params.integrateTF}"
+        "Rscript scripts/create_Seurat.R --covThresh={params.coverage_threshold} --featThresh={params.features_threshold} --top50={params.top50_threshold} --featureLQ={params.Feature_lowerQuantile} --featureUQ={params.Feature_upperQuantile} --CountUQ={params.Count_upperQuantile} --MTUQ={params.percentMT_upperQuantile} --integrate={params.integrateTF} --res={params.clusterRes}"

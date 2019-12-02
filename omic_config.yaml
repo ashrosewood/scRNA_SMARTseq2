@@ -61,7 +61,7 @@ mito:
 #########################
 # Minimum library size (coverage)
 coverage_threshold:
-  2e5
+  1e5
 # Minimum number of expressed genes
 features_threshold:
   1000   
@@ -82,7 +82,9 @@ percentMT_upperQuantile:
   0.85
 # Deciding whether or not to integrate across samples
 integrateTF:
-  FALSE
+  TRUE
 # nCount upper quantile threshold
 Count_upperQuantile:
   0.99
+clusterRes:
+  1.0
