@@ -47,8 +47,9 @@ rule Hisat2:
     threads: 12
     params:
         gtf=config["gtf_file"]
+    conda:
+        "../envs/Mapping.yaml"
     run:
-        HiSat2=config["hisat2_tool"],
         pathToGenomeIndex = config["hisat2_index"]
         shell("""
                 {HiSat2} -q -x {pathToGenomeIndex} \

@@ -43,5 +43,14 @@ conda deactivate
 conda remove --name NMT_create_Seurat --all
 
 grep prefix envs/* | sed "s/\:.*//g" | while read line; do
-    sed -i "s/prefix.*//g"
+    sed -i "s/prefix.*//g" $line
 done
+
+## make a new hisat2 samtools env for mapping
+conda create --prefix=/home/groups/CEDAR/woodfin/projects/CHC/wong_mohammad/20200309_CHC_PDAC_scRNA_myEnvs/scNMT_transcriptomeMapping/HiSat2
+conda activate /home/groups/CEDAR/woodfin/projects/CHC/wong_mohammad/20200309_CHC_PDAC_scRNA_myEnvs/scNMT_transcriptomeMapping/HiSat2
+conda install -c bioconda hisat2
+conda install -c bioconda samtools
+conda env export --no-builds > envs/Mapping.yaml
+conda deactivate
+sed -i "s/prefix.*//g" envs/Mapping.yaml
