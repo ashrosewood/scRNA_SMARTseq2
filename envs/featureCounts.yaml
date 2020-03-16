@@ -1,8 +1,12 @@
 name: Fcounts
 channels:
+  - conda-forge
   - bioconda
   - defaults
 dependencies:
-  - libgcc-ng=9.1.0=hdf63c60_0
-  - subread=1.6.4=h84994c4_1
-  - zlib=1.2.11=h7b6447c_3
+  - _libgcc_mutex=0.1
+  - libgcc-ng=9.1.0
+  - subread=1.6.4
+  - zlib=1.2.11
+
+
