@@ -46,19 +46,16 @@ rule Hisat2:
         "samples/hisat2/{sample}_output.bam"
     threads: 12
     params:
-        gtf=config["gtf_file"]
+        gtf=config["gtf_file"],
+	pathToGenomeIndex=config["hisat2_index"]
     conda:
         "../envs/Mapping.yaml"
-    run:
-        pathToGenomeIndex = config["hisat2_index"]
-        shell("""
-                {HiSat2} -q -x {pathToGenomeIndex} \
-                -1 {input[0]} -2 {input[1]} -p {threads} \
-                --dta --sp 1000,1000 --no-mixed \
-                --no-discordant -S samples/hisat2/{wildcards.sample}_output.sam 
-		samtools view -S -b samples/hisat2/{wildcards.sample}_output.sam > {output}         
-                rm samples/hisat2/{wildcards.sample}_output.sam
-		""")
+    shell:
+        """
+	hisat2 -q -x {params.pathToGenomeIndex} -1 {input[0]} -2 {input[1]} -p {threads} --dta --sp 1000,1000 --no-mixed --no-discordant -S samples/hisat2/{wildcards.sample}_output.sam 
+	samtools view -S -b samples/hisat2/{wildcards.sample}_output.sam > {output}         
+        rm samples/hisat2/{wildcards.sample}_output.sam
+        """
 
 rule feature_count:
     input:
