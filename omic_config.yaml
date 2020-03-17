@@ -10,12 +10,12 @@ bed_file:
   /home/groups/CEDAR/anno/gtf/hg19_ens87.chr.bed
 # Pre-built hisat indexes for hg19
 hisat2_index:
-  /home/groups/CEDAR/anno/indices/hisat2/hg19/hg19index  
+  /home/groups/CEDAR/anno/indices/hisat2/hg19/hg19index
 filter_anno:
   /home/groups/CEDAR/anno/biomaRt/hg19.Ens_87.biomaRt.geneAnno.Rdata
 barcode_file:
-  /home/groups/CEDAR/woodfin/projects/NMT-seq/Transcriptome/20190613_matched20190523NM/PE-pipeline/barcodes.tsv
-  
+  /home/groups/CEDAR/anno/biomaRt/hg19.Ens_87.biomaRt.geneAnno.Rdata
+ 
 ####################################################################
 # Tool-specific files that will not change from project-to-project
 ####################################################################
@@ -25,7 +25,7 @@ adapter:
   /home/exacloud/lustre1/CEDAR/roskamsh/projects/Omics-QC-pipeline/data/TruSeq2-SE.fa
 # Pre-built genome indexes for various organisms which we will screen against to look for contamination
 conf:
-  /home/groups/CEDAR/tools/FastQ_Screen_Genomes/fastq_screen.conf    
+  /home/groups/CEDAR/tools/FastQ_Screen_Genomes/fastq_screen.conf
 # Paths to various tools which are used in this pipeline
 hisat2_tool:
   /home/groups/CEDAR/tools/hisat2-2.0.4/hisat2
@@ -48,7 +48,7 @@ biotypes:
   protein_coding
 # Unique project identifier which will be concatenated onto your counts table file name.
 project_id:
-  HM_novagene_20190703
+  CHC_030220
 # Genome assembly used for GO analysis, format must be as below, with the genome assembly first, and the version of ensembl second, separated by a period.
 assembly:
   hg19
@@ -82,7 +82,7 @@ percentMT_upperQuantile:
   0.85
 # Deciding whether or not to integrate across samples
 integrateTF:
-  TRUE
+  FALSE
 # nCount upper quantile threshold
 Count_upperQuantile:
   0.99

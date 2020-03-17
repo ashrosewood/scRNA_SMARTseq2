@@ -43,28 +43,21 @@ if( !is.na(charmatch("--help",args)) || !is.na(charmatch("--help",args)) ){
 
 #setwd("../")
 #coverage_threshold <- 1e5    # Minimum library size (coverage)
-
 #features_threshold = snakemake@params[['features_threshold']]
 #features_threshold <- 1000   # Minimum number of expressed features
 
 #top50_threshold = snakemake@params[['top50_threshold']]
 #top50_threshold <- 0.75      # Maximum fraction of reads accounting for the top 50 features
-
 #Feature_lowerQuantile = snakemake@params[['Feature_lowerQuantile']]
 #Feature_lowerQuantile <- .01
-
 #Feature_upperQuantile = snakemake@params[['Feature_upperQuantile']]
 #Feature_upperQuantile <- .99
-
 #Count_upperQuantile = snakemake@params[['Count_upperQuantile']]
 #Count_upperQuantile <- .99
-
 #percentMT_upperQuantile = snakemake@params[['percentMT_upperQuantile']]
 #percentMT_upperQuantile <- .85
-
 #integrateTF = snakemake@params[['integrateTF']]
-#integrateTF = TRUE
-
+#integrateTF = FALSE
 #res = 1.0
 
 opts <- list()
