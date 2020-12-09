@@ -1,4 +1,4 @@
-# scNMT_transcriptomeMapping
+# scRNA_SMARTSEQ2_transcriptomeMapping
 
 This pipeline is for the processing of paired-end single-cell RNA sequencing. The pipeline takes individual FASTQs for each cell as input and proceeds to trim, map, filter and count the reads. Then using this counts table it produces a Seurat object with the data. Standard outputs include counts tables, metadata files, QC plots, and the Seurat object.
 
