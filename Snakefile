@@ -50,13 +50,14 @@ for sample in SAMPLES:
 
 rule all:
     input:
-       expand("samples/trimmed/{sample}_R1.fq.gz_trimming_report.txt", sample = SAMPLES),
-       expand("samples/trimmed/{sample}_R2.fq.gz_trimming_report.txt", sample = SAMPLES),
-       expand("samples/fastqc/{sample}_R1_val_1_fastqc.{fastqc_ext}", sample = SAMPLES, fastqc_ext=fastqc_ext),
-       expand("samples/fastqc/{sample}_R2_val_2_fastqc.{fastqc_ext}", sample = SAMPLES, fastqc_ext=fastqc_ext),
-       expand("samples/fastqscreen/{sample}/{sample}_R1_val_1_screen.{fastqscreen_ext}", sample=SAMPLES, fastqscreen_ext=fastqscreen_ext),
-       expand("samples/fastqscreen/{sample}/{sample}_R2_val_2_screen.{fastqscreen_ext}", sample=SAMPLES, fastqscreen_ext=fastqscreen_ext),
+#       expand("samples/trimmed/{sample}_R1.fq.gz_trimming_report.txt", sample = SAMPLES),
+#       expand("samples/trimmed/{sample}_R2.fq.gz_trimming_report.txt", sample = SAMPLES),
+       expand("samples/fastqc/{sample}_R1_trimmed_fastqc.{fastqc_ext}", sample = SAMPLES, fastqc_ext=fastqc_ext),
+#       expand("samples/fastqc/{sample}_R2_val_2_fastqc.{fastqc_ext}", sample = SAMPLES, fastqc_ext=fastqc_ext),
+       expand("samples/fastqscreen/{sample}/{sample}_R1_trimmed_screen.{fastqscreen_ext}", sample=SAMPLES, fastqscreen_ext=fastqscreen_ext),
+#       expand("samples/fastqscreen/{sample}/{sample}_R2_val_2_screen.{fastqscreen_ext}", sample=SAMPLES, fastqscreen_ext=fastqscreen_ext),
        expand("samples/hisat2/{sample}_output.bam", sample = SAMPLES),
+       expand("samples/hisat2/{sample}.saturation.pdf", sample = SAMPLES),
        "data/counts/raw_counts_.tsv",
        "data/counts/raw_counts_.tsv.summary",       
        "data/counts/raw_counts_.filt.tsv",

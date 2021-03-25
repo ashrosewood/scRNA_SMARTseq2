@@ -34,6 +34,14 @@
         "c" : 12,
         "mem" : 64000
     },
+    "RPKM_sat" :
+    {
+        "J" : "RPKM_sat",
+        "e" : "logs/RPKM_sat/RPKM_sat_%j.err",
+        "o" : "logs/RPKM_sat/RPKM_sat_%j.out",
+        "c" : 1,
+        "mem" : 40000
+    },
     "feature_count" :
     {
         "J" : "feature_count",

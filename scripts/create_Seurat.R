@@ -345,7 +345,7 @@ if (opts$integrate) {
              & nFeature_RNA <= quantile(SO$nFeature_RNA, opts$Feature_upperQuantile)
              & nCount_RNA <= quantile(SO$nCount_RNA, opts$Count_upperQuantile)
              & nCount_RNA >= opts$coverage_threshold
-             & percent.mt <= quantile(SO$percent.mt, opts$percentMT_upperQuantile))
+             & percent.mt <= quantile(subSO$percent.mt, opts$percentMT_upperQuantile))
 
 
 
