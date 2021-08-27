@@ -57,17 +57,17 @@ rule Hisat2:
         rm samples/hisat2/{wildcards.sample}_output.sam
         """
 
-rule RPKM_sat:
-    input:
-        "samples/hisat2/{sample}_output.bam"
-    output:
-        "samples/hisat2/{sample}.saturation.pdf"
-    params:
-        ref=config["rseqc_bed"]
-    conda:
-        "../envs/RSeQC.yaml"
-    shell:
-        "RPKM_saturation.py -r {params.ref} -i {input} -o samples/hisat2/{wildcards.sample}" 
+#rule RPKM_sat:
+#    input:
+#        "samples/hisat2/{sample}_output.bam"
+#    output:
+#        "samples/hisat2/{sample}.saturation.pdf"
+#    params:
+#        ref=config["rseqc_bed"]
+#    conda:
+#        "../envs/RSeQC.yaml"
+#    shell:
+#        "RPKM_saturation.py -r {params.ref} -i {input} -o samples/hisat2/{wildcards.sample}" 
 
 rule feature_count:
     input:

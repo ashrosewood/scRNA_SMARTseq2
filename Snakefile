@@ -57,7 +57,7 @@ rule all:
        expand("samples/fastqscreen/{sample}/{sample}_R1_val_1_screen.{fastqscreen_ext}", sample=SAMPLES, fastqscreen_ext=fastqscreen_ext),
        expand("samples/fastqscreen/{sample}/{sample}_R2_val_2_screen.{fastqscreen_ext}", sample=SAMPLES, fastqscreen_ext=fastqscreen_ext),
        expand("samples/hisat2/{sample}_output.bam", sample = SAMPLES),
-       expand("samples/hisat2/{sample}.saturation.pdf", sample = SAMPLES),
+#       expand("samples/hisat2/{sample}.saturation.pdf", sample = SAMPLES),
        "data/counts/raw_counts_.tsv",
        "data/counts/raw_counts_.tsv.summary",       
        "data/counts/raw_counts_.filt.tsv",

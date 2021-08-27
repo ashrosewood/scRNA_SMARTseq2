@@ -162,9 +162,13 @@ SO@meta.data$origin <- str_extract(rownames(SO@meta.data), "[^_]+")
 
 SO[["percent.mt"]] <- PercentageFeatureSet(object = SO, pattern = "^MT-")
 #SO[["percent.mt"]] <- PercentageFeatureSet(object = SO, features = mt)
+SO$percent.mt[which(is.na(SO$percent.mt))] <- 0
+
+plotlist <- VlnPlot(object=SO, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+title <- ggdraw() + draw_label(paste0("Total Cells: ", ncol(SO)))
 
 png(paste0(io$plotDir, "/pre_QCviolin.png"))
-VlnPlot(object=SO, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+cowplot::plot_grid(title, plotlist, ncol=1, rel_heights = c(0.1,1))
 dev.off()
 
 filtSO.list <- list()
@@ -268,6 +272,7 @@ if (opts$integrate) {
     ## Calculate quality metrics ##
     SO[["percent.mt"]] <- PercentageFeatureSet(object = SO, pattern = "^MT-")
     #SO[["percent.mt"]] <- PercentageFeatureSet(object = SO, features = mt)
+    SO$percent.mt[which(is.na(SO$percent.mt))] <- 0
 
     png(sub("$", "/pre_QCviolin.png", io$plotDir))
     VlnPlot(object=SO, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
@@ -376,8 +381,11 @@ if (opts$integrate) {
     SO <- SO.integrated
 }
 
+plotlist <- VlnPlot(object=SO, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+title <- ggdraw() + draw_label(paste0("Total Cells Passing QC: ", ncol(SO)))
+
 png(paste0(io$plotDir, "/post_QCviolin.png"))
-VlnPlot(object=SO, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+cowplot::plot_grid(title, plotlist, ncol=1, rel_heights = c(0.1,1))
 dev.off()
 
 ## cell cycle scoring
