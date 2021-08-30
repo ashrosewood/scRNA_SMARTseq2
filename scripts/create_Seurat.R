@@ -160,6 +160,8 @@ feature_metadata$gene_unique <- rownames(SO)
 ctr <- 0
 SO@meta.data$origin <- str_extract(rownames(SO@meta.data), "[^_]+")
 
+cell_count_preQC <- table(SO$origin)
+
 SO[["percent.mt"]] <- PercentageFeatureSet(object = SO, pattern = "^MT-")
 #SO[["percent.mt"]] <- PercentageFeatureSet(object = SO, features = mt)
 SO$percent.mt[which(is.na(SO$percent.mt))] <- 0
@@ -387,6 +389,12 @@ title <- ggdraw() + draw_label(paste0("Total Cells Passing QC: ", ncol(SO)))
 png(paste0(io$plotDir, "/post_QCviolin.png"))
 cowplot::plot_grid(title, plotlist, ncol=1, rel_heights = c(0.1,1))
 dev.off()
+
+cell_count_postQC <- table(SO$origin)
+
+cell_count_df <- as.data.frame(rbind(cell_count_preQC, cell_count_postQC))
+
+write.table(cell_count_df, "data/seurat/cell_counts.tsv", quote = F, sep = "\t")
 
 ## cell cycle scoring
 cc_genes  <- read.table("data/regev_lab_cell_cycle_genes.txt")
