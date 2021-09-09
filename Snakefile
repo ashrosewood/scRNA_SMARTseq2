@@ -58,6 +58,8 @@ rule all:
        expand("samples/fastqscreen/{sample}/{sample}_R2_val_2_screen.{fastqscreen_ext}", sample=SAMPLES, fastqscreen_ext=fastqscreen_ext),
        expand("samples/hisat2/{sample}_output.bam", sample = SAMPLES),
 #       expand("samples/hisat2/{sample}.saturation.pdf", sample = SAMPLES),
+#       "donefile.txt",
+       "samples/hisat2/all_merged.saturation.r",
        "data/counts/raw_counts_.tsv",
        "data/counts/raw_counts_.tsv.summary",       
        "data/counts/raw_counts_.filt.tsv",

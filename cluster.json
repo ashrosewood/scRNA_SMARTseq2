@@ -34,6 +34,14 @@
         "c" : 12,
         "mem" : 64000
     },
+    "merge_bam" :
+    {
+        "J" : "merge_bam",
+        "e" : "logs/merge_bam/merge_bam_%j.err",
+        "o" : "logs/merge_bam/merge_bam_%j.out",
+        "c" : 1,
+        "mem" : 16000
+    },
     "RPKM_sat" :
     {
         "J" : "RPKM_sat",
@@ -41,6 +49,14 @@
         "o" : "logs/RPKM_sat/RPKM_sat_%j.out",
         "c" : 1,
         "mem" : 40000
+    },
+    "aggregate_RPKM" :
+    {
+        "J" : "aggregate_RPKM",
+        "e" : "logs/aggregate_RPKM/aggregate_RPKM_%j.err",
+        "o" : "logs/aggregate_RPKM/aggregate_RPKM_%j.out",
+        "c" : 1,
+        "mem" : 4000
     },
     "feature_count" :
     {
